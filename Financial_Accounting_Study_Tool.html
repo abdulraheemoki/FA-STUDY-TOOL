@@ -1,0 +1,1566 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Financial Accounting Study Tool (FIM4002, Topics 1–6)</title>
+<style>
+:root{--bg:#F3F0E8;--bg2:#E8E3D6;--ink:#1A2422;--muted:#4A5A57;--card:#FFFCF6;--accent:#0D4A43;--accent2:#15685E;--soft:#D7EBE7;--gold:#6E5210;--goldsoft:#F3E6C4;--ok:#0C5A38;--okbg:#D8F0E4;--bad:#8A1C1C;--badbg:#F8DDDD;--mid:#9A6A00;--line:#D0CBBE;--shadow:0 1px 3px rgba(26,36,34,.08),0 8px 24px rgba(26,36,34,.06);--r:14px;--font:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:16px;line-height:1.5}
+.wrap{max-width:960px;margin:0 auto;padding:16px 16px 80px}
+h1{margin:0 0 6px;font-size:1.7rem}h1 span{font-size:.9rem;background:var(--goldsoft);color:var(--gold);padding:2px 8px;border-radius:8px;vertical-align:middle}
+h2{font-size:1.15rem;margin:26px 0 10px}h3{margin:6px 0 6px;font-size:1.05rem}
+.small{font-size:.86rem;color:var(--muted)}.muted{color:var(--muted)}
+.hidden{display:none!important}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:16px 18px;margin-bottom:14px}
+.hero{display:flex;gap:16px;align-items:center;justify-content:space-between;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border-radius:var(--r);padding:20px 22px;box-shadow:var(--shadow)}
+.hero p{margin:4px 0;opacity:.95}.hero .small{color:#e8f3f1}
+.hero .btn.primary{background:#fff;color:var(--accent);border-color:#fff}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.sec{cursor:pointer;transition:transform .12s,box-shadow .12s;display:flex;flex-direction:column}
+.sec:hover,.sec:focus{transform:translateY(-2px);outline:2px solid var(--soft)}
+.sec p{flex:1;margin:4px 0 10px;color:var(--muted);font-size:.93rem}
+.sec-ico{font-size:1.6rem}.sec-foot{display:flex;gap:6px;flex-wrap:wrap}
+.pill{display:inline-block;font-size:.78rem;padding:2px 9px;border-radius:999px;background:var(--soft);color:var(--accent);font-weight:600;margin-right:4px}
+.pill.gold{background:var(--goldsoft);color:var(--gold)}.pill.muted{background:var(--bg2);color:var(--muted)}
+.pill.bad{background:var(--badbg);color:var(--bad)}.pill.okp{background:var(--okbg);color:var(--ok)}.pill.tiny{font-size:.7rem;padding:0 6px}
+.btn{font:inherit;font-weight:600;border:1.5px solid var(--accent);background:var(--card);color:var(--accent);padding:9px 16px;border-radius:10px;cursor:pointer}
+.btn:hover{background:var(--soft)}.btn:disabled{opacity:.4;cursor:default}
+.btn.primary{background:var(--accent);color:#fff}.btn.primary:hover{background:var(--accent2)}
+.btn.ghost{border-color:transparent;background:transparent}.btn.ghost:hover{background:var(--bg2)}
+.btn.danger{border-color:var(--bad);color:var(--bad)}.btn.danger:hover{background:var(--badbg)}
+.btn.big{padding:12px 22px;font-size:1.05rem}.btn.small{padding:5px 11px;font-size:.85rem}
+.topbar{display:flex;align-items:center;gap:10px;margin-bottom:10px}.topbar h2{margin:0}
+.row-end{display:flex;justify-content:flex-end;align-items:center;gap:10px;margin-top:10px;flex-wrap:wrap}
+.bar-row{display:grid;grid-template-columns:minmax(140px,280px) 1fr 54px;gap:10px;align-items:center;margin:7px 0}
+.bar-lbl{font-size:.9rem}.bar{height:12px;background:var(--bg2);border-radius:6px;overflow:hidden}
+.fill{height:100%;background:var(--muted)}.fill.ok{background:var(--ok)}.fill.mid{background:#C58B00}.fill.bad{background:var(--bad)}
+.bar-val{text-align:right;font-weight:600;font-size:.9rem}
+.tbl{width:100%;border-collapse:collapse;font-size:.9rem}.tbl th,.tbl td{border-bottom:1px solid var(--line);padding:6px;text-align:left;vertical-align:top}
+.t-ok td{background:var(--okbg)}.t-bad td{background:var(--badbg)}.mt{margin-top:10px}
+.field{margin:12px 0}.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.chip{border:1px solid var(--line);border-radius:999px;padding:5px 12px;background:#fff;cursor:pointer;font-size:.9rem}
+.chk{display:flex;gap:8px;align-items:center;margin:12px 0;font-weight:600}
+.rules li{margin:4px 0}
+.quiz-head{display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:var(--bg);padding:8px 0;z-index:5}
+.qh-left{display:flex;align-items:center;gap:8px}.qh-title{font-weight:700}
+.timer{font-variant-numeric:tabular-nums;font-weight:800;font-size:1.25rem;background:var(--accent);color:#fff;padding:6px 14px;border-radius:10px}
+.timer.off{background:var(--bg2);color:var(--muted);font-size:.9rem}.timer.warn{background:#C58B00}.timer.crit{background:var(--bad);animation:pulse 1s infinite}
+@keyframes pulse{50%{opacity:.6}}
+.tbar{height:5px;background:var(--bg2);border-radius:3px;margin-bottom:10px;overflow:hidden}.tbar div{height:100%;background:var(--accent2);transition:width .25s linear}
+.nav{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.nb{width:36px;height:36px;border-radius:8px;border:1.5px solid var(--line);background:#fff;font-weight:700;cursor:pointer;color:var(--ink)}
+.nb.done{background:var(--soft);border-color:var(--accent2)}.nb.cur{outline:3px solid var(--accent);outline-offset:1px}.nb.flag{border-color:#C58B00;box-shadow:inset 0 -4px 0 #C58B00}
+.qmeta{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px}
+.qtext{font-size:1.08rem;font-weight:600;margin-bottom:12px;white-space:pre-line}
+.ar{background:var(--bg2);border-radius:10px;padding:10px 12px;margin-bottom:12px}.ar div{margin:4px 0}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{display:flex;gap:10px;align-items:flex-start;border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;background:#fff;cursor:pointer}
+.opt:hover{border-color:var(--accent2)}.opt.sel{border-color:var(--accent);background:var(--soft)}
+.opt input{margin-top:4px}
+.let{flex:0 0 26px;height:26px;border-radius:50%;background:var(--bg2);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.85rem}
+.hint{font-size:.86rem;color:var(--gold);background:var(--goldsoft);padding:6px 10px;border-radius:8px;margin-bottom:10px}
+.match{display:flex;flex-direction:column;gap:8px}
+.mrow{display:grid;grid-template-columns:1fr 1.2fr;gap:10px;align-items:center;border-bottom:1px dashed var(--line);padding-bottom:8px}
+.mleft{font-weight:600}.mrow select{font:inherit;padding:8px;border-radius:8px;border:1.5px solid var(--line);background:#fff;width:100%}
+.qfoot{display:flex;justify-content:space-between;gap:8px}
+.score{display:flex;gap:20px;align-items:center}.score.ok{border-left:6px solid var(--ok)}.score.mid{border-left:6px solid #C58B00}.score.bad{border-left:6px solid var(--bad)}
+.big-score{font-size:2.4rem;font-weight:800;line-height:1;text-align:center;min-width:120px}.big-score span{display:block;font-size:1.1rem;color:var(--muted)}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin:8px 0}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.tab{font:inherit;border:1px solid var(--line);background:#fff;border-radius:999px;padding:5px 14px;cursor:pointer;color:var(--ink);text-decoration:none;font-weight:600;font-size:.9rem}.tab.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.rev.r-ok{border-left:5px solid var(--ok)}.rev.r-bad{border-left:5px solid var(--bad)}
+.ans{background:var(--bg2);border-radius:10px;padding:8px 12px;margin:6px 0 10px}.ans div{margin:3px 0}
+.why-list{display:flex;flex-direction:column;gap:6px}
+.why{display:flex;gap:10px;padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:#fff}
+.why.w-ok{background:var(--okbg);border-color:#9fd3b8}.why.w-bad{background:var(--badbg);border-color:#e7a9a9}
+.why .small{color:var(--ink);opacity:.85}
+.exp{margin-top:10px;padding:10px 12px;background:var(--soft);border-radius:10px}
+.trap{margin-top:8px;padding:8px 12px;background:var(--goldsoft);border-radius:10px;color:var(--gold)}
+.steps{margin-top:10px;padding:10px 12px;background:#fff;border:1px dashed var(--accent2);border-radius:10px}.steps ol{margin:6px 0 0 0;padding-left:22px}.steps li{font-variant-numeric:tabular-nums}
+.learn ul,.lesson ul{padding-left:20px}.learn li,.lesson li{margin:6px 0}
+.formula{background:var(--goldsoft);border-radius:10px;padding:10px 14px;margin-top:8px;font-variant-numeric:tabular-nums}.formula div{margin:3px 0;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.92rem}
+.ok-note{background:var(--okbg)}
+footer{margin-top:30px;text-align:center}
+@media (max-width:640px){
+ .hero{flex-direction:column;align-items:flex-start}.bar-row{grid-template-columns:1fr 60px}.bar-lbl{grid-column:1/3}
+ .mrow{grid-template-columns:1fr}.score{flex-direction:column;align-items:flex-start}.qfoot .btn{flex:1}
+ h1{font-size:1.35rem}.timer{font-size:1.05rem}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div id="home" class="view"></div>
+  <div id="learn" class="view hidden"></div>
+  <div id="setup" class="view hidden"></div>
+  <div id="quiz" class="view hidden"></div>
+  <div id="results" class="view hidden"></div>
+  <footer class="small">Built from the FIM4002 Weeks 1–6 flashcards. Works offline. Scores are saved only in this browser.</footer>
+</div>
+<script>
+const TOPICS = {
+  1: "Basics of Accounting",
+  2: "Accounting Equation",
+  3: "Conceptual Framework",
+  4: "Structure of Financial Statements",
+  5: "Non-Current Assets & Depreciation",
+  6: "Current Assets"
+};
+
+const LEARN = {
+  1: {
+    summary: "What accounting is, who uses it, the five elements, profit and capital, and the three business types.",
+    points: [
+      "<b>Accounting</b> = identifying, measuring and communicating financial information so users can make decisions. <b>Bookkeeping</b> is only the recording part. Auditing is a separate job that checks the accounts.",
+      "<b>Financial accounting</b>: for outsiders, required by law, follows GAAP/IFRS, whole business, mostly historical, annual. <b>Management accounting</b>: for managers, not required by law, no strict rules, can focus on one product or department, can look ahead, produced whenever needed.",
+      "The <b>Conceptual Framework</b> matters most for external reporting, because outsiders cannot ask for tailored reports.",
+      "<b>Five elements</b>: assets (owned), liabilities (owed), equity/capital (owner's share), revenue (earned), expenses (costs of running the business). Current = within 1 year; non-current = more than 1 year.",
+      "<b>Tricky items</b>: drawings are NOT an expense, they reduce capital. Bad debt written off = expense. Bad debt recovered = revenue. Commission received = revenue. Prepaid rent = current asset. Sales returns/discounts reduce Sales; purchase returns/discounts reduce Purchases (contra items). A loan is a liability; only the <i>interest</i> is an expense.",
+      "<b>Sole trader</b>: one owner, unlimited liability (personal assets at risk). Accounts used by HMRC, the bank and potential buyers.",
+      "<b>Partnership</b>: 2+ owners, agreement need not be written, <b>joint and several liability</b>: each partner can be made to pay ALL the debts.",
+      "<b>Limited company</b>: limited liability (lose only what you put in). Ltd cannot sell shares to the public; plc can. BOTH must file accounts publicly (Registrar of Companies). Shareholders appoint directors to run it.",
+      "<b>Users</b>: investors (return: buy/hold/sell), lenders (risk of non-repayment), suppliers (will we be paid?), employees (pay, job security), customers (continued supply), government (tax, statistics), public (local/environmental impact).",
+      "<b>General-purpose</b> statements serve many users at once; primary users are <b>owners and long-term lenders</b>."
+    ],
+    formulas: [
+      "Equity = Assets − Liabilities",
+      "Net sales = Sales − Sales returns − Sales discounts",
+      "Profit = Revenue − Expenses (drawings never reduce profit)",
+      "Closing capital = Opening capital + Capital introduced + Profit (− Loss) − Drawings"
+    ]
+  },
+  2: {
+    summary: "The accounting equation, definitions of assets and liabilities, recognition, measurement, changes in ownership interest and debit/credit rules.",
+    points: [
+      "<b>Assets = Liabilities + Ownership interest</b>. Every transaction changes at least two items, so it always balances.",
+      "<b>Asset</b>: controlled now, from a past event, could bring future benefit. Three tests: benefit? control? past event? Cash, receivables, land, raw materials, shares in other companies pass. Workforce, an advertising campaign or the owner's personal car fail.",
+      "<b>Liability</b>: a present obligation (legal or from normal practice), from a past event, to give up resources. A <b>contingent liability</b> (e.g. a possible lawsuit that may never happen) is NOT recognised. It is disclosed in the notes (prudence).",
+      "<b>Recognition</b>: meets the definition, is relevant and a faithful representation, and benefit exceeds cost. Uncertain benefit means it is not recognised.",
+      "<b>Historical cost</b> = price on the day of the deal. <b>Fair value</b> = price received to sell in an orderly transaction between market participants at the measurement date.",
+      "<b>Ownership interest = net assets</b> (a residual; it depends on how assets and liabilities are measured).",
+      "Ownership interest only changes through <b>trading</b> (revenue up, expenses down) or the <b>owner</b> (capital in up, drawings down).",
+      "Transaction effects: owner puts in cash (A↑ OI↑); owner gives a truck (A↑ OI↑); loan received (A↑ L↑); loan repaid (A↓ L↓); buy equipment for cash (one asset up, one down, no change in total); buy on credit (A↑ L↑); pay supplier (A↓ L↓); bill a client (receivable↑, OI↑ revenue); collect cash later (cash↑, receivable↓, no change in total).",
+      "<b>Debit/credit</b>: Assets up = DEBIT, down = credit. Liabilities and OI up = CREDIT, down = debit. Expenses and drawings are debits; revenue and capital introduced are credits."
+    ],
+    formulas: [
+      "A = L + OI   |   OI = A − L   |   L = A − OI",
+      "Closing net assets = Opening OI + Capital in − Drawings + Revenue − Expenses",
+      "Change in net assets = Change in ownership interest"
+    ]
+  },
+  3: {
+    summary: "The IASB Conceptual Framework: objective, underlying assumptions, qualitative characteristics, constraints and measurement bases (including present value).",
+    points: [
+      "The Framework is <b>NOT an accounting standard</b>. It sets the concepts that guide the IASB in writing IFRS, and it helps choose a policy when no IFRS applies. The 2018 version covers the objective, qualitative characteristics, reporting entity, elements, recognition/derecognition, measurement, presentation and capital maintenance.",
+      "<b>Objective</b>: information on financial position (SOFP), performance (statement of comprehensive income) and changes in financial position (statement of cash flows) for a wide range of users.",
+      "<b>Two underlying assumptions</b> (NOT qualitative characteristics): <b>accrual basis</b> (record when the transaction happens, not when cash moves) and <b>going concern</b> (the business will continue for the foreseeable future). If it is not a going concern: realisable (break-up) value, long-term items become current, extra costs like redundancy are recognised.",
+      "<b>Four qualitative characteristics</b> (lecture): understandability, relevance, comparability and reliability. Profitability, prudence and neutrality are NOT among the four.",
+      "<b>Reliability has 5 parts</b>: faithful representation, substance over form, neutrality, prudence and completeness.",
+      "<b>Understandability</b>: users have reasonable knowledge and study with reasonable diligence. Do not exclude relevant information just because it is hard.",
+      "<b>Relevance</b>: helps evaluate past, present or future events (<b>predictive value</b>) or confirm past judgements. Affected by nature and <b>materiality</b> (omission/misstatement could change decisions; mainly size, but nature matters, e.g. fraud).",
+      "<b>Comparability</b>: comparatives, consistent policies, disclosure of policies and of changes (with the reason and effect).",
+      "<b>Substance over form</b>: Sara's oven sale-and-leaseback is, in substance, a loan secured on the oven, so no £5,000 profit is recognised.",
+      "<b>Neutrality</b> = free from bias (not prepared to reach a chosen result). <b>Prudence</b> = caution: do not overstate assets/income or understate liabilities/expenses. They can CONFLICT.",
+      "<b>Completeness</b> (within materiality and cost): omitting material information reduces BOTH reliability and relevance.",
+      "<b>Constraints</b>: timeliness (reporting early using estimates gains relevance and loses reliability) and cost vs benefit.",
+      "<b>Four measurement bases</b>: historical cost (past), current cost (replace today), realisable value (sell today), present value (future cash discounted). The most relevant measure is not always the most reliable."
+    ],
+    formulas: [
+      "PV = Future cash ÷ (1 + r)ⁿ",
+      "1 year at 10%: ÷ 1.10 | 2 years: ÷ 1.21 | 3 years: ÷ 1.331",
+      "Discounting is NOT 'take r% off' (£11,000 in 1 year at 10% = £10,000, not £9,900)"
+    ]
+  },
+  4: {
+    summary: "The three primary statements, SOFP structure, income statement, cash-flow classification, double entry, journals, ledgers, trial balance, COGS and depreciation entries.",
+    points: [
+      "<b>SOFP</b> = financial position (snapshot on ONE date). <b>Income statement</b> = performance (over a PERIOD). <b>Statement of cash flows</b> = financial <b>adaptability</b>. Notes are not one of the three.",
+      "<b>Flow</b>: transactions and events → bookkeeping → accounting records → rules of measurement and disclosure → financial statements.",
+      "<b>SOFP</b>: NCA + CA − CL − NCL = opening capital ± capital in/out + profit. Liabilities due within 1 year are current; after 1 year, non-current. Horizontal or vertical layout.",
+      "<b>Cash flows</b>: operating (day-to-day trading: customers, suppliers, wages), investing (buying/selling non-current assets), financing (shares, raising/repaying loans).",
+      "<b>Profit ≠ cash</b>: credit sales/purchases, cash tied up in inventory, cash spent on non-current assets and loan repayments, cash raised from shares/borrowing.",
+      "<b>Journal</b> = the first record in date order. <b>Ledger</b> = entries grouped by account (Date, Particulars, Page, Debit, Credit, Balance). Debit balance positive; credit balance in (brackets).",
+      "<b>Returns</b>: goods back TO a supplier: Dr Trade payables, Cr Purchases returns. Goods back FROM a customer: Dr Sales returns, Cr Trade receivables.",
+      "Credit purchase of goods: Dr Purchases, Cr Trade payables. Owner deposits capital: Dr Bank, Cr Capital. Rent paid: Dr Rent expense, Cr Bank.",
+      "<b>Trial balance</b>: a list of ledger balances. Debit side: assets, expenses, drawings. Credit side: liabilities, capital, revenue. It is NOT a financial statement and does NOT prove every entry is correct.",
+      "<b>COGS</b>: when goods are sold, Dr Cost of goods sold, Cr Inventory (at COST, not selling price).",
+      "<b>Depreciation entry</b>: Dr Depreciation expense, Cr Accumulated depreciation. No cash leaves. Net amount = cost − accumulated depreciation."
+    ],
+    formulas: [
+      "Profit = Revenue − COGS − Other expenses",
+      "Change in cash = Net operating + Net investing + Net financing",
+      "Inventory = Purchases (at cost) − Cost of goods sold",
+      "NBV = Cost − Accumulated depreciation"
+    ]
+  },
+  5: {
+    summary: "Non-current assets, cost, capital vs revenue expenditure, depreciation methods, year-end adjustments (accruals, prepayments, bad debts, drawings), cost of sales and company vs sole trader P&L.",
+    points: [
+      "<b>NCA</b>: held for continuing use to help make profit, not sold in normal trading. Tangible (PPE), intangible (patents, trademarks, development costs, goodwill) and long-term investments.",
+      "<b>Cost</b> = purchase price + costs of getting it ready to use (legal fees, installation, commissioning). Running costs are expenses.",
+      "<b>Improvement</b> (longer life, cheaper running, better output, e.g. an extension) = capital expenditure, added to cost. <b>Repair</b> back to original condition (storm-damaged roof, replacement bus engine) = revenue expenditure, an expense in P&L.",
+      "<b>Depreciation</b> spreads cost over useful life to match revenue. It is NOT market value and does NOT save cash. Yearly charge goes to P&L; accumulated depreciation sits in the SOFP.",
+      "Three inputs: cost, useful life and residual value. Total depreciation = cost − residual value.",
+      "<b>Straight-line</b>: same charge each year. <b>Reducing balance</b>: fixed % × NBV at the START of the year, so the charge falls each year.",
+      "<b>NBV</b> (depreciated cost) = cost − accumulated depreciation. Revaluation to fair value is optional (usually land and buildings) and must be kept up to date. Revaluation gain goes to the <b>revaluation reserve</b> in equity, NOT the P&L. Land and buildings are not depreciated in these examples.",
+      "<b>Prepayment</b> (paid in advance) = current asset, reduces expense. <b>Accrual</b> (incurred, not paid) = current liability, increases expense.",
+      "<b>Bad debt</b> (definitely won't be paid, e.g. bankrupt) is written off. <b>Provision for doubtful debts</b> = estimate on REMAINING receivables. P&L charge = write-offs + INCREASE in provision (a decrease reduces the charge). SOFP: receivables − provision.",
+      "<b>Drawings</b>: cash taken, goods taken (at cost, out of purchases), private share of expenses, and a sole trader's personal income tax paid by the business.",
+      "<b>Sole trader</b>: no tax in P&L; net profit added to capital. <b>Company</b>: tax on profits is a P&L expense; profit after tax goes to retained earnings; dividends are paid from it. Both show interest as a finance cost."
+    ],
+    formulas: [
+      "Straight-line = (Cost − Residual) ÷ Useful life",
+      "Reducing balance = Rate × Opening NBV",
+      "Cost of sales = Opening inventory + Purchases − Returns outward − Closing inventory",
+      "Gross profit = (Sales − Returns inward) − Cost of sales",
+      "Bad & doubtful debts charge = Write-offs + (New provision − Old provision)",
+      "Prepayment = Payment × (months unused ÷ months covered)"
+    ]
+  },
+  6: {
+    summary: "Current assets, working capital and its cycle, inventory (lower of cost and NRV), receivables, prepayments, current investments, cash, and SOFP layout and adjustments.",
+    points: [
+      "<b>Current asset</b>: controlled, from a past event, expected to be sold or turned into cash within a short time (usually under 12 months). Examples: raw materials, WIP, finished goods, trade receivables, prepayments and accrued income, current investments, short-term deposits, cash at bank and in hand.",
+      "<b>Working capital</b> = CA − CL. Too low: may not pay bills on time. Too high: money tied up that could fund non-current assets/growth.",
+      "<b>Working capital cycle</b>: buy inventory → sell on credit (receivables) → collect cash → pay suppliers.",
+      "Recognition can be questioned when there is doubt about benefit or reliable measurement (cash is the most certain; WIP and doubtful debts are less certain).",
+      "<b>Inventory</b> at the <b>lower of cost and NRV</b>, ITEM BY ITEM. A gain on one item cannot offset a loss on another (prudence).",
+      "<b>WIP</b> has extra non-completion risk; measure it at the cost of work done. Raw materials: lower of cost and NRV.",
+      "<b>Receivables</b>: trade (credit customers) vs other debtors (loans to employees or other businesses, tax refunds due). Shown at selling price less any provision.",
+      "<b>Current investments</b> at fair value (mark to market); fair-value changes go to the <b>income statement</b>.",
+      "<b>Cash</b>: verified by counting or by the bank statement; the most reliable current asset.",
+      "<b>SOFP layout</b>: NCA (cost, acc. dep., NBV) + CA − CL = total assets less current liabilities; − NCL = net assets = capital.",
+      "Adjustments: accruals → CL; prepayments → CA; depreciation → raises accumulated depreciation; bad debts/provision → reduce receivables; profit raises capital; drawings reduce it.",
+      "A <b>proposed</b> dividend not yet recognised is NOT deducted from retained earnings (Smith Plc: 209,106 + 41,635 = 250,741)."
+    ],
+    formulas: [
+      "Working capital = Current assets − Current liabilities",
+      "Net assets = Total assets less current liabilities − Non-current liabilities",
+      "Closing capital = Opening capital + Profit − Drawings",
+      "Retained earnings = Opening + Profit for year − Dividends paid (not proposed)"
+    ]
+  }
+};
+
+/* ============ TRUE / FALSE ============ */
+const TF = [
+ {t:1,q:"Drawings are an expense because they reduce the owner's capital.",a:false,exp:"Drawings DO reduce capital, but they are a withdrawal by the owner, not a cost of running the business. They never reduce profit.",trap:"Trap: 'reduces capital' is true, so the statement feels right. The conclusion ('so it is an expense') is the false part."},
+ {t:1,q:"A bad debt that was written off last year and is recovered this year is treated as revenue.",a:true,exp:"Getting back a debt you had already written off is income, so it is revenue. (A bad debt written off is an expense.)"},
+ {t:1,q:"Rent paid in advance is a current liability because it relates to a future period.",a:false,exp:"Prepaid rent is a CURRENT ASSET. The business has paid for a benefit (use of premises) it has not yet received.",trap:"'Future period' tempts you towards liability, but nothing is owed. You are owed the benefit."},
+ {t:1,q:"Management accounting must comply with IFRS so that managers can compare departments.",a:false,exp:"Management accounting has no compulsory rules. Only financial accounting must follow GAAP or IFRS."},
+ {t:1,q:"Under joint and several liability, one partner can be made to pay the whole of the partnership's debts.",a:true,exp:"Each partner can be made to meet ALL the partnership's obligations if the others cannot pay."},
+ {t:1,q:"A private limited company (Ltd) does not need to make its accounts public because it cannot sell shares to the public.",a:false,exp:"Both Ltd and plc companies must file accounts publicly with the Registrar of Companies. The Ltd/plc difference is only about selling shares to the public.",trap:"Two true-sounding facts are glued together with a false 'because'."},
+ {t:1,q:"Bookkeeping and accounting are two words for the same activity.",a:false,exp:"Bookkeeping only records transactions. Accounting also measures them and communicates the information to users."},
+ {t:1,q:"The primary users of general-purpose financial statements are owners and long-term lenders.",a:true,exp:"The lecture names owners and long-term lenders as the primary users, even though many other groups are interested."},
+ {t:1,q:"The interest on a 10-year bank loan is an expense, but the loan itself is a non-current liability.",a:true,exp:"The loan is owed and due after more than a year, so it is a non-current liability. Only the cost of borrowing (interest) is an expense."},
+ {t:1,q:"A sole trader has limited liability because, for accounting purposes, the business is treated as separate from the owner.",a:false,exp:"The business is separate for ACCOUNTING only. Legally the sole trader has UNLIMITED liability: personal assets, even a home, can be taken.",trap:"The 'separate entity' idea is about record-keeping, not legal protection."},
+ {t:1,q:"Sales returns and sales discounts are deducted from sales to arrive at net sales.",a:true,exp:"They are contra items to sales: Net sales = Sales − sales returns − sales discounts."},
+ {t:2,q:"An advertising campaign expected to increase sales next year should be recognised as an asset.",a:false,exp:"The future benefit is too uncertain and there is no evidence cash will flow in, so it is not recognised as an asset."},
+ {t:2,q:"A possible legal claim over defective products, which may never happen, is shown as a liability in the statement of financial position.",a:false,exp:"It is a CONTINGENT liability. It fails the recognition test, so it is disclosed in the notes rather than recognised (prudence says mention it)."},
+ {t:2,q:"Ownership interest is a residual amount, and its value depends on how assets and liabilities are measured.",a:true,exp:"Ownership interest = assets − liabilities, so it does not stand on its own. Change how you measure assets or liabilities and it changes."},
+ {t:2,q:"Receiving cash from a customer who was invoiced last month increases total assets.",a:false,exp:"Cash goes up and receivables go down by the same amount. Total assets do not change; the revenue was recorded last month when the service was done."},
+ {t:2,q:"Liabilities and ownership interest increase with a credit entry.",a:true,exp:"Right-hand side items (liabilities and ownership interest) go up with a credit and down with a debit."},
+ {t:2,q:"Buying equipment for cash increases the total of the accounting equation.",a:false,exp:"One asset goes up (equipment) and another goes down (cash). The total is unchanged."},
+ {t:2,q:"A highly skilled workforce is recognised as an asset because it brings future economic benefit to the business.",a:false,exp:"The business does not control its staff, and the benefit is uncertain, so the workforce is not recognised as an asset."},
+ {t:2,q:"If the owner gives the business a truck rather than cash, assets and ownership interest both increase.",a:true,exp:"A non-cash contribution from the owner still raises assets (truck) and ownership interest (capital)."},
+ {t:3,q:"The Conceptual Framework is an IFRS accounting standard that companies must comply with.",a:false,exp:"The Framework is NOT a standard. It sets out the concepts that guide the IASB when it writes IFRS Standards."},
+ {t:3,q:"The accrual basis and going concern are two of the four qualitative characteristics.",a:false,exp:"They are the two UNDERLYING ASSUMPTIONS. The four qualitative characteristics are understandability, relevance, comparability and reliability."},
+ {t:3,q:"The lecture notes that prudence can conflict with neutrality.",a:true,exp:"Always choosing the cautious option is itself a bias, so prudence can clash with neutrality."},
+ {t:3,q:"Relevant information should be left out if some users would find it too difficult to understand.",a:false,exp:"The Framework says relevant information should NOT be excluded just because it is complex. Users are assumed to study it with reasonable diligence."},
+ {t:3,q:"A very small amount caused by fraud may still be material.",a:true,exp:"Materiality is mainly about size, but nature matters too. A small amount caused by fraud may still need to be shown."},
+ {t:3,q:"£11,000 receivable in one year has a present value of £9,900 at a 10% discount rate.",a:false,exp:"PV = 11,000 ÷ 1.10 = £10,000. £9,900 comes from wrongly taking 10% off (11,000 × 0.9).",trap:"Discounting means dividing by (1 + r), not subtracting r%."},
+ {t:3,q:"Reporting before all the facts are known improves timeliness but reduces reliability.",a:true,exp:"Using estimates gets information to users sooner (more relevant) but makes it less certain (less reliable)."},
+ {t:3,q:"Substance over form means a transaction should be reported according to its legal form.",a:false,exp:"It means the opposite: report the economic SUBSTANCE (what really happens), not just the legal form (what the paperwork says)."},
+ {t:3,q:"If the directors intend to liquidate the company, its assets should be measured at realisable (break-up) value.",a:true,exp:"The going concern assumption no longer applies, so assets are shown at what they could be sold for, and long-term items become current."},
+ {t:3,q:"Omitting material information reduces only the understandability of financial statements.",a:false,exp:"Leaving out material information reduces BOTH reliability and relevance."},
+ {t:4,q:"The statement of cash flows reports an entity's financial adaptability.",a:true,exp:"SOFP = position, income statement = performance, statement of cash flows = adaptability (the ability to generate and use cash)."},
+ {t:4,q:"If the trial balance totals agree, this proves that every transaction has been recorded correctly.",a:false,exp:"A trial balance only checks that debits equal credits. Errors such as posting to the wrong account, or omitting a transaction entirely, still let it balance."},
+ {t:4,q:"Cash paid to buy a delivery van is an operating cash outflow because the van is used in day-to-day trading.",a:false,exp:"Buying a non-current asset is an INVESTING outflow, even if the asset is then used in daily operations.",trap:"'Used day to day' tempts you to say operating; the classification depends on the nature of the cash flow (buying a non-current asset)."},
+ {t:4,q:"In a ledger account, a credit balance is shown in brackets.",a:true,exp:"A debit balance is shown as a positive number; a credit balance is shown in brackets."},
+ {t:4,q:"Drawings appear in the debit column of a trial balance.",a:true,exp:"Drawings reduce ownership interest, so like expenses they are debits."},
+ {t:4,q:"Recording depreciation reduces the cash balance.",a:false,exp:"The entry is Dr Depreciation expense, Cr Accumulated depreciation. No cash leaves the business."},
+ {t:4,q:"Cash received from issuing new shares is a financing inflow.",a:true,exp:"Raising (or repaying) long-term money such as shares and loans is a financing activity."},
+ {t:4,q:"When goods are sold, inventory is reduced by the selling price of those goods.",a:false,exp:"Inventory is reduced by the COST of the goods sold (Dr COGS, Cr Inventory). The selling price goes to revenue."},
+ {t:4,q:"The income statement shows the position of the business on one particular date.",a:false,exp:"That describes the SOFP (a snapshot). The income statement covers a PERIOD of time."},
+ {t:5,q:"Replacing a roof damaged in a storm is capital expenditure and is added to the cost of the building.",a:false,exp:"It restores the asset to its original condition, so it is a REPAIR (revenue expenditure) and is expensed in the P&L."},
+ {t:5,q:"Under the reducing balance method, the percentage is applied to the original cost every year.",a:false,exp:"It is applied to the NET BOOK VALUE at the start of each year, which is why the charge falls every year."},
+ {t:5,q:"Net book value shows what the asset could be sold for today.",a:false,exp:"NBV = cost − accumulated depreciation. It is the result of a calculation, not a market value."},
+ {t:5,q:"A gain on revaluing land is credited to a revaluation reserve in equity, not to the P&L.",a:true,exp:"A revaluation is a change in value, not trading income, so it goes to the revaluation reserve. Profit is unaffected."},
+ {t:5,q:"A sole trader's personal income tax, paid from the business bank account, is treated as drawings.",a:true,exp:"It is the owner's own tax bill, so it is a drawing, not a business expense. (A company's tax IS an expense.)"},
+ {t:5,q:"The full amount of the provision for doubtful debts is charged to the P&L every year.",a:false,exp:"Only the CHANGE (increase) in the provision goes through the P&L, together with any bad debts written off."},
+ {t:5,q:"Legal fees paid on buying a machine are expensed immediately in the P&L.",a:false,exp:"Legal fees, installation and commissioning are costs of getting the asset ready, so they are capitalised (added to cost)."},
+ {t:5,q:"Depreciation ensures cash is available to replace the asset at the end of its life.",a:false,exp:"Depreciation spreads cost over useful life. It does not set any cash aside."},
+ {t:5,q:"A company's tax on profits appears in its P&L, but a sole trader's P&L shows no tax expense.",a:true,exp:"A company is a separate legal person and pays its own tax (P&L expense). A sole trader is taxed personally, so any tax paid is drawings."},
+ {t:5,q:"Under straight-line depreciation, the annual charge is calculated as cost divided by useful life, ignoring residual value.",a:false,exp:"Straight-line = (Cost − Residual value) ÷ useful life. Ignoring residual value overstates the charge."},
+ {t:6,q:"Inventory is valued at the lower of cost and net realisable value, applied item by item.",a:true,exp:"Compare cost and NRV for each item separately, take the lower, then add them up."},
+ {t:6,q:"An expected loss on one inventory item can be offset against an expected profit on another item.",a:false,exp:"Prudence: expected losses are recognised now, but profits are only recognised when goods are sold. A gain on one item cannot cancel a loss on another."},
+ {t:6,q:"Changes in the fair value of current investments are reported in the income statement.",a:true,exp:"Current investments are marked to market and the change in fair value goes to the income statement."},
+ {t:6,q:"An accrued expense, such as unpaid electricity, is shown as a current asset.",a:false,exp:"An accrual is owed, so it is a CURRENT LIABILITY. Prepayments are current assets."},
+ {t:6,q:"A very high level of working capital is always a sign of good financial management.",a:false,exp:"Too much working capital means money is tied up idle that could be used to buy non-current assets and expand."},
+ {t:6,q:"A loan to an employee for relocation costs is a trade receivable.",a:false,exp:"It does not arise from sales, so it is an OTHER DEBTOR. Trade receivables are credit customers."},
+ {t:6,q:"A proposed dividend that has not been recognised is deducted from retained earnings at the year end.",a:false,exp:"As in Smith Plc, a merely proposed dividend is not recognised as owed, so retained earnings are not reduced (209,106 + 41,635 = 250,741)."},
+ {t:6,q:"Work in progress carries an extra risk, non-completion, compared with finished goods.",a:true,exp:"WIP has all the risks of finished goods plus the risk it may never be finished."},
+ {t:6,q:"Cash is considered the most certain and reliable current asset.",a:true,exp:"Its amount can be verified by counting it or by checking the bank statement."}
+];
+
+/* ============ MATCHING ============ */
+const MATCH = [
+ {t:1,q:"Match each user group to its MAIN interest in the financial statements.",pairs:[["Investors","Whether the return is good enough to buy, hold or sell"],["Lenders","Whether the business could fail to repay"],["Suppliers","Whether they will be paid for goods supplied on credit"],["Employees","Pay and job security"],["Government","Tax and statistics"],["The public","Effect on the local area and environment"],["Customers","Whether supply will continue"]],exp:"Each group has something different at stake, so each asks a different question. Remember: suppliers worry about being PAID; lenders worry about REPAYMENT of loans."},
+ {t:1,q:"Classify each item correctly.",pairs:[["Drawings","Reduction of capital"],["Commission received","Revenue"],["Prepaid rent","Current asset"],["10-year bank loan","Non-current liability"],["Bad debt written off","Expense"],["Sales returns","Reduction of sales (contra)"],["Bad debt recovered","Revenue"]],exp:"Drawings are never an expense. Prepaid rent is an asset (benefit still to come). Contra items reduce the account they relate to. A recovered bad debt is income."},
+ {t:1,q:"Match each form of business (or type of accounting) to its key feature.",pairs:[["Sole trader","One owner with unlimited personal liability"],["Partnership","Joint and several liability"],["Private limited company (Ltd)","Limited liability, but cannot offer shares to the public"],["Public limited company (plc)","Can offer shares to the public, with stricter rules"],["Management accounting","Flexible, forward-looking, for internal decisions"],["Financial accounting","Required by law, follows IFRS/GAAP, for outsiders"]],exp:"Liability is the key distinction: sole traders and partners are personally liable; company shareholders can lose only what they put in."},
+ {t:2,q:"Match each transaction to its effect on the accounting equation.",pairs:[["Owner introduces cash","Assets ↑, Ownership interest ↑"],["Repay part of a bank loan","Assets ↓, Liabilities ↓"],["Buy inventory on credit","Assets ↑, Liabilities ↑"],["Buy equipment for cash","One asset ↑, another asset ↓ (no change in total)"],["Owner withdraws cash for personal use","Assets ↓, Ownership interest ↓"],["Bill a client for a service, payment next month","Assets ↑, Ownership interest ↑"],["Collect cash from that client next month","One asset ↑, another asset ↓ (no change in total)"]],exp:"Every transaction affects at least two items. Billing a client creates a receivable and revenue (OI↑). Collecting the cash later is just a swap between two assets."},
+ {t:2,q:"Which side of the trial balance does each account's normal balance appear on?",pairs:[["Sales","Credit"],["Drawings","Debit"],["Trade payables","Credit"],["Rent expense","Debit"],["Capital","Credit"],["Trade receivables","Debit"],["Sales returns","Debit"],["Purchases returns","Credit"],["Accumulated depreciation","Credit"]],exp:"Debit: assets, expenses, drawings (and contra-revenue such as sales returns). Credit: liabilities, capital, revenue (and purchases returns, which reduce purchases). Accumulated depreciation builds up from credit entries (Cr Accumulated depreciation)."},
+ {t:3,q:"Match each concept to its description.",pairs:[["Predictive value","Helps users evaluate future events"],["Neutrality","Free from bias; not prepared to reach a chosen result"],["Prudence","Caution under uncertainty: do not overstate assets or income"],["Materiality","Omission or misstatement could influence decisions"],["Substance over form","Report economic reality, not just the legal paperwork"],["Timeliness","Reporting before all aspects are known so information is still relevant"],["Completeness","Nothing material left out, within limits of materiality and cost"],["Understandability","Clear to users with reasonable knowledge and diligence"]],exp:"Watch the near-misses: neutrality is about bias; prudence is about caution. Materiality is about whether it changes decisions."},
+ {t:3,q:"A van: original cost less depreciation £6,000; replacement £24,000; sale price £5,000; PV of future profits £9,000. Match each measurement basis to its figure.",pairs:[["Historical cost (less depreciation)","£6,000"],["Current cost","£24,000"],["Realisable value","£5,000"],["Present value","£9,000"]],exp:"Historical = past, current cost = replace today, realisable = sell today, present value = future cash in today's money. Each answers a different question about the same asset."},
+ {t:3,q:"Classify each item under the lecture's Conceptual Framework headings.",pairs:[["Accrual basis","Underlying assumption"],["Going concern","Underlying assumption"],["Relevance","Qualitative characteristic"],["Comparability","Qualitative characteristic"],["Reliability","Qualitative characteristic"],["Understandability","Qualitative characteristic"],["Timeliness","Constraint"],["Cost versus benefit","Constraint"],["Neutrality","Component of reliability"]],exp:"Two assumptions, four qualitative characteristics, two constraints. Neutrality, prudence, completeness, faithful representation and substance over form sit INSIDE reliability."},
+ {t:4,q:"Classify each cash flow.",pairs:[["Cash received from customers","Operating"],["Cash paid to suppliers","Operating"],["Wages paid","Operating"],["Purchase of a machine","Investing"],["Proceeds from selling an old vehicle","Investing"],["Issue of shares","Financing"],["Repayment of a bank loan","Financing"],["New bank loan received","Financing"]],exp:"Operating = day-to-day trading. Investing = buying/selling non-current assets. Financing = raising or repaying long-term money (shares, loans)."},
+ {t:4,q:"Match each record or statement to what it does.",pairs:[["Statement of financial position","Financial position on one date"],["Income statement","Financial performance over a period"],["Statement of cash flows","Financial adaptability"],["Trial balance","Checks double entry; not a financial statement"],["Journal","First record of each transaction, in date order"],["Ledger","Entries grouped by account, with a running balance"]],exp:"Position = snapshot; performance = period; adaptability = cash. The trial balance is a checking tool, not one of the statements."},
+ {t:4,q:"Match each transaction to its correct double entry.",pairs:[["Owner deposits £60,000 in the business bank","Dr Bank, Cr Capital"],["Clothing bought on credit","Dr Purchases, Cr Trade payables"],["Goods returned TO a supplier","Dr Trade payables, Cr Purchases returns"],["Goods returned BY a customer","Dr Sales returns, Cr Trade receivables"],["Rent paid from the bank","Dr Rent expense, Cr Bank"],["Depreciation of equipment","Dr Depreciation expense, Cr Accumulated depreciation"],["Cost of goods sold recorded","Dr Cost of goods sold, Cr Inventory"]],exp:"Ask: which element, up or down, debit or credit. Returns have their own accounts so the original entries are not deleted."},
+ {t:5,q:"Is each item capital expenditure (added to the asset) or revenue expenditure (P&L expense)?",pairs:[["Building an extension to a shop","Capital expenditure"],["Installation of a new machine","Capital expenditure"],["Legal fees on buying a machine","Capital expenditure"],["Commissioning (testing) a new machine","Capital expenditure"],["Replacing a bus engine to restore original condition","Revenue expenditure"],["Replacing a storm-damaged roof","Revenue expenditure"],["Routine running costs of a machine","Revenue expenditure"]],exp:"Capitalise costs of getting an asset ready and genuine improvements (longer life, lower running costs, better output). Repairs that just restore the original condition are expenses."},
+ {t:5,q:"Where does each year-end item end up?",pairs:[["Electricity used but not yet paid","Current liability (accrual)"],["Insurance paid for next year","Current asset (prepayment)"],["Accumulated depreciation","Deducted from cost of non-current assets"],["Gain on revaluing land","Revaluation reserve in equity"],["Provision for doubtful debts","Deducted from trade receivables"],["Sole trader's income tax paid by the business","Drawings"],["Company tax on profits","Expense in the P&L"]],exp:"Each adjustment hits both the P&L (or equity) and the SOFP, so the equation still balances."},
+ {t:5,q:"Match each scenario to its annual depreciation charge.",pairs:[["Straight-line: cost £24,000, residual £3,000, life 7 years","£3,000"],["Reducing balance 25%, cost £20,000, YEAR 2 charge","£3,750"],["10% straight-line on cost of £42,000, no residual","£4,200"],["20% reducing balance: cost £60,000, acc. dep. £21,600","£7,680"],["Straight-line: cost £50,000, residual £5,000, life 8 years","£5,625"]],extra:["£5,000","£12,000","£6,250"],exp:"SL: (24,000 − 3,000) ÷ 7 = 3,000; (50,000 − 5,000) ÷ 8 = 5,625. RB year 2: year 1 = 5,000, NBV 15,000 × 25% = 3,750. 10% × 42,000 = 4,200. RB on NBV: (60,000 − 21,600) × 20% = 38,400 × 20% = 7,680."},
+ {t:6,q:"Classify each item.",pairs:[["Raw materials","Current asset"],["Work in progress","Current asset"],["Loan to an employee","Current asset"],["Short-term deposit","Current asset"],["Shop shelving","Non-current asset"],["Patent","Non-current asset"],["Trade payables","Current liability"],["Accrued loan interest","Current liability"]],exp:"Current assets will be sold or turned into cash within about 12 months (an employee loan is an 'other debtor'). Shelving and patents are kept for continuing use. Accruals and payables are owed."},
+ {t:6,q:"Apply lower of cost and NRV item by item. Match each line to the amount shown in the SOFP.",pairs:[["Item A: cost £7,200, NRV £6,900","£6,900"],["Item B: cost £4,500, NRV £5,100","£4,500"],["Item C: cost £3,350, NRV £3,350","£3,350"],["Item D: cost £2,800, NRV £1,950","£1,950"],["Total inventory","£16,700"]],extra:["£7,200","£5,100","£17,850","£17,300","£2,800"],exp:"Take the lower figure for each item: 6,900 + 4,500 + 3,350 + 1,950 = £16,700. Total cost would be £17,850 and total NRV £17,300; both are wrong because the rule is applied item by item."},
+ {t:2,q:"Match each element to its definition.",pairs:[["Asset","Controlled now, from a past event, could bring future benefit"],["Liability","Present obligation from a past event to give up resources"],["Ownership interest","What is left after deducting all liabilities from all assets"],["Revenue","Increases ownership interest through trading"],["Expense","Decreases ownership interest through trading"],["Contingent liability","Possible obligation, disclosed in the notes, not recognised"]],exp:"Ownership interest is the residual (net assets). A contingent liability fails the recognition test, so it is only disclosed."}
+];
+
+/* ============ STANDARD MCQ (first option is correct; shuffled at runtime) ============ */
+const MCQ = [
+ // ---------- Topic 1 ----------
+ {t:1,q:"Which best describes accounting?",o:[
+  ["Identifying, measuring and communicating financial information to help users make decisions","Correct. This is the lecture definition: find, measure AND share."],
+  ["Recording and classifying transactions in journals and ledgers","That is bookkeeping, which is only one part of accounting."],
+  ["Checking that financial statements give a true and fair view","That is auditing, a separate job that checks the accounts."],
+  ["Preparing reports that help managers plan and control departments","That is only management accounting, a subset of accounting."]],
+  exp:"Accounting goes beyond recording: it measures the figures and communicates them to the people who need them for decisions."},
+ {t:1,q:"Which is a feature of FINANCIAL accounting rather than management accounting?",o:[
+  ["It covers the whole business, is mostly historical and is required by law","Correct. Financial accounting is for outsiders, is legally required, follows IFRS/GAAP and looks back."],
+  ["It can focus on a single product line or department","Management accounting can do this; financial accounting covers the whole business."],
+  ["It is produced whenever managers need it","Management accounting is produced as needed; financial accounting is usually annual."],
+  ["It routinely includes forecasts and budgets for next year","Looking ahead is a feature of management accounting."]],
+  exp:"Financial: external users, legal requirement, set rules, whole business, past, annual. Management: internal, flexible, detailed, forward-looking."},
+ {t:1,sub:"Calculation",q:"Sales £124,000; sales returns £6,500; sales discounts £2,300; expenses £87,400; owner's drawings £15,000. What is the profit?",o:[
+  ["£27,800","Correct."],
+  ["£12,800","You deducted drawings. Drawings are NOT an expense and never reduce profit."],
+  ["£36,600","You ignored sales returns and discounts. They reduce sales."],
+  ["£30,100","You deducted sales returns but forgot sales discounts."]],
+  steps:["Net sales = 124,000 − 6,500 − 2,300 = £115,200","Profit = 115,200 − 87,400 = £27,800","Drawings (£15,000) reduce capital, NOT profit"],
+  exp:"Net sales first, then subtract expenses. Drawings are ignored for profit."},
+ {t:1,sub:"Calculation",q:"Opening capital £42,500; capital introduced £7,800; net LOSS for the year £5,600; drawings £9,300. What is closing capital?",o:[
+  ["£35,400","Correct."],
+  ["£46,600","You ADDED the loss as if it were a profit."],
+  ["£27,600","You left out the £7,800 capital introduced."],
+  ["£54,000","You added drawings instead of deducting them."]],
+  steps:["Closing = Opening + Capital introduced − Loss − Drawings","= 42,500 + 7,800 − 5,600 − 9,300","= £35,400"],
+  exp:"A loss is deducted (it replaces 'add profit'). Drawings are always deducted."},
+ {t:1,q:"Which pairing is correct?",o:[
+  ["Purchase returns: reduction of purchases","Correct. Purchase returns and discounts are contra items to Purchases."],
+  ["Drawings: expense","Drawings reduce capital; they are not an expense."],
+  ["Bad debt recovered: expense","A recovered bad debt is income (revenue). A bad debt WRITTEN OFF is the expense."],
+  ["Commission received: liability","Commission received is income earned, so it is revenue."]],
+  exp:"Contra items cancel part of the account they relate to: sales returns reduce Sales, purchase returns reduce Purchases."},
+ {t:1,q:"A freelance photographer (sole trader) closes her business owing £80,000; the business assets raise only £30,000. What happens to the remaining £50,000?",o:[
+  ["She is personally liable and her own assets, including her home, can be taken","Correct. Sole traders have unlimited liability."],
+  ["Nothing: the business is a separate entity, so creditors lose the £50,000","Separation applies only for accounting records, not legally."],
+  ["Her liability is limited to the capital she invested","That is limited liability, which belongs to company shareholders."],
+  ["HMRC pays creditors from her tax account","There is no such mechanism; HMRC is a user of her accounts, not a guarantor."]],
+  exp:"For a sole trader the owner and business are legally one. Unlimited liability means personal assets are at risk."},
+ {t:1,q:"Which statement about limited companies is correct?",o:[
+  ["Both Ltd and plc companies must file accounts publicly through the Registrar of Companies","Correct. Both are formed under the Companies Act and must file accounts."],
+  ["Only a plc must make its accounts public","Ltd companies must file publicly too."],
+  ["Shareholders in a Ltd have unlimited liability because their shares are private","Ltd shareholders also have limited liability."],
+  ["In a plc, all shareholders run the business day to day","Shareholders appoint directors to run the company."]],
+  exp:"Ltd vs plc is about offering shares to the public. Both have limited liability, directors and public filing."},
+ {t:1,q:"A bank considering a five-year loan to a business is MAINLY interested in:",o:[
+  ["Whether the business could fail to repay the interest and the loan","Correct. Lenders focus on default risk."],
+  ["Whether dividends are growing","That is an investor's question."],
+  ["Job security and pay levels","That is an employee concern."],
+  ["Whether supply of goods will continue","That is a customer concern."]],
+  exp:"Investors: return. Lenders: repayment. Suppliers: being paid. Employees: jobs. Customers: continued supply."},
+ {t:1,sub:"Calculation",q:"At the year end a sole trader has assets of £95,000 and liabilities of £38,500. Opening capital was £40,000, drawings were £12,000 and no capital was introduced. What was the profit for the year?",o:[
+  ["£28,500","Correct."],
+  ["£4,500","You subtracted drawings instead of adding them back."],
+  ["£16,500","You ignored drawings: profit was needed to cover them as well."],
+  ["£55,000","You used total assets instead of net assets (closing capital)."]],
+  steps:["Closing capital = 95,000 − 38,500 = £56,500","Closing = Opening + Profit − Drawings, so Profit = Closing − Opening + Drawings","Profit = 56,500 − 40,000 + 12,000 = £28,500"],
+  exp:"Work backwards from the capital equation. Drawings took value OUT, so profit must have been bigger than the increase in capital."},
+ {t:1,q:"Who are regarded as the PRIMARY users of general-purpose financial statements?",o:[
+  ["Owners and long-term lenders","Correct, as stated in the lecture."],
+  ["Customers and the general public","They are interested, but not the primary users."],
+  ["Employees and suppliers","Interested users, but not the primary ones."],
+  ["Managers of the business","Managers can obtain tailored internal reports (management accounting)."]],
+  exp:"General-purpose statements serve many users at once, but owners and long-term lenders are the primary users."},
+
+ // ---------- Topic 2 ----------
+ {t:2,sub:"Calculation",q:"A business has non-current assets of £112,600, current assets of £71,400 and ownership interest of £67,250. What are its total liabilities?",o:[
+  ["£116,750","Correct."],
+  ["£45,350","You used only non-current assets (112,600 − 67,250)."],
+  ["£4,150","You used only current assets (71,400 − 67,250)."],
+  ["£251,250","You added ownership interest to assets."]],
+  steps:["Total assets = 112,600 + 71,400 = £184,000","Liabilities = Assets − Ownership interest","= 184,000 − 67,250 = £116,750"],
+  exp:"Rearrange A = L + OI to get L = A − OI, using TOTAL assets."},
+ {t:2,q:"Which item meets the definition of an asset for the business?",o:[
+  ["A trade receivable from a customer who is expected to pay","Correct. Controlled, from a past sale, with expected future cash."],
+  ["A loyal and highly trained workforce","The business does not control its staff and the benefit is uncertain."],
+  ["The owner's personal house, offered as security for a loan","The business does not control the owner's personal property."],
+  ["A new advertising campaign expected to boost sales","The benefit is too uncertain and there is no evidence that cash will flow in."]],
+  exp:"Three tests: future benefit, control, and a past event. A receivable passes all three as long as the customer is expected to pay."},
+ {t:2,sub:"Calculation",q:"Opening ownership interest £25,000. During the year the owner contributes £6,000 and withdraws £4,500. Revenue is £52,000 and expenses £39,750. What are net assets at the year end?",o:[
+  ["£38,750","Correct."],
+  ["£47,750","You ADDED the withdrawals."],
+  ["£32,750","You left out the £6,000 contribution."],
+  ["£12,250","That is only the profit, not closing net assets."]],
+  steps:["Closing = Opening + Contributions − Withdrawals + Revenue − Expenses","= 25,000 + 6,000 − 4,500 + 52,000 − 39,750","= £38,750"],
+  exp:"Change in net assets = change in ownership interest. Only trading and owner transactions change it."},
+ {t:2,q:"Land costing £90,000 is bought: £30,000 paid in cash and a note payable signed for the rest. What is the overall effect?",o:[
+  ["Total assets ↑ £60,000; liabilities ↑ £60,000","Correct. Land +90,000 and cash −30,000 give net assets +60,000; the note payable is +60,000."],
+  ["Total assets ↑ £90,000; liabilities ↑ £90,000","You forgot that cash went DOWN by £30,000, and only £60,000 is owed."],
+  ["Total assets ↑ £90,000; liabilities ↑ £60,000; ownership interest ↑ £30,000","The owner put nothing in; there is no change to ownership interest."],
+  ["Total assets ↑ £60,000; ownership interest ↑ £60,000","The £60,000 is borrowed, so it is a liability, not ownership interest."]],
+  steps:["Land (asset) +90,000","Cash (asset) −30,000 → net assets +60,000","Note payable (liability) +60,000","Equation: +60,000 = +60,000 ✔"],
+  exp:"Work out each item separately before netting. The cash part is just an asset swap; the credit part creates a liability."},
+ {t:2,q:"The owner transfers her personal truck, worth £15,000, into the business. What is the effect?",o:[
+  ["Assets ↑ and ownership interest ↑","Correct. A non-cash contribution from the owner is still capital introduced."],
+  ["Assets ↑ and liabilities ↑","The business does not owe anyone; the owner contributed it."],
+  ["No effect, because no cash changed hands","Non-cash contributions are still recorded."],
+  ["Assets ↑ and revenue ↑","It was not earned by trading, so it is not revenue."]],
+  exp:"Money (or assets) from the owner creates ownership interest. Borrowed money creates a liability."},
+ {t:2,q:"Which of the following increases with a DEBIT entry?",o:[
+  ["Drawings","Correct. Drawings reduce ownership interest, so they are debits."],
+  ["Sales revenue","Revenue increases ownership interest, so it is a credit."],
+  ["Trade payables","Liabilities increase with a credit."],
+  ["Capital","Capital (ownership interest) increases with a credit."]],
+  exp:"Assets, expenses and drawings increase with debits. Liabilities, capital and revenue increase with credits."},
+ {t:2,q:"Land bought for £200,000 several years ago could now be sold for £350,000 in an orderly transaction between market participants. At what amount is it measured under FAIR VALUE?",o:[
+  ["£350,000","Correct. Fair value is today's market exit price."],
+  ["£200,000","That is historical cost."],
+  ["£150,000","That is the increase in value, not the value."],
+  ["£550,000","You added cost and market value."]],
+  exp:"Historical cost looks back to the day of the deal. Fair value looks at the market today."},
+ {t:2,q:"Company X billed a client $5,000 in May; the client paid in June. What is the effect on Company X's TOTAL ASSETS in June?",o:[
+  ["No change: cash ↑ $5,000 and amount due ↓ $5,000","Correct. Collection only swaps one asset for another."],
+  ["Increase of $5,000 because cash is received","Cash rises but the receivable falls by the same amount."],
+  ["Increase of $5,000 and revenue is recognised in June","Revenue was earned and recognised in May, when the service was done."],
+  ["Decrease of $5,000 as the receivable is removed","Cash comes in at the same time, so the total does not fall."]],
+  exp:"Revenue is earned when the service is done (May). In June it is just cash in, receivable out."},
+ {t:2,q:"A possible legal action over defective products may never happen. How is it most likely treated?",o:[
+  ["Disclosed in the notes as a contingent liability","Correct. It fails the recognition test, but prudence says mention it."],
+  ["Recognised as a current liability","It is not a present obligation; it may never happen."],
+  ["Ignored completely","Prudence says it should be disclosed."],
+  ["Recognised as an expense and a provision in the SOFP","It does not meet recognition criteria, so it is not recognised in the main statements."]],
+  exp:"A contingent liability is uncertain. It is not put in the main statement but may be mentioned in the notes."},
+ {t:2,q:"An expense of £800 is incurred and paid immediately in cash. Which entries are made?",o:[
+  ["Debit Expense £800, Credit Cash £800","Correct. Expense (reduces OI) = debit; cash (asset down) = credit."],
+  ["Debit Cash £800, Credit Expense £800","This is the wrong way round."],
+  ["Credit Expense £800, Credit Cash £800","Two credits cannot balance."],
+  ["Debit Expense £800, Debit Cash £800","Two debits cannot balance."]],
+  exp:"Every transaction needs an equal debit and credit."},
+
+ // ---------- Topic 3 ----------
+ {t:3,q:"What is the status of the Conceptual Framework?",o:[
+  ["It is not a standard; it sets out the concepts that guide standard-setting","Correct."],
+  ["It is a mandatory accounting standard that overrides IFRS","It is not a standard and does not override IFRS."],
+  ["It replaces IFRS Standards where they conflict","It sits behind the standards; it does not replace them."],
+  ["It is a set of tax rules agreed with HMRC","It has nothing to do with tax law."]],
+  exp:"Framework = principles. IFRS Standards = detailed rules built on those principles. It also helps when no IFRS covers a transaction."},
+ {t:3,q:"Goods are delivered on 28 December 2026, invoiced on 3 January 2027 and paid for in February 2027. The year end is 31 December. Under the accrual basis, the revenue belongs to:",o:[
+  ["The year ended 31 December 2026","Correct. The transaction (delivery) happened in December."],
+  ["The year ending 2027, when the invoice is issued","The invoice date does not decide the period."],
+  ["The year ending 2027, when the cash is received","That would be the cash basis."],
+  ["Half to each year","Revenue is not split; it belongs to the period in which it occurred."]],
+  exp:"Accrual basis: record when the transaction happens, not when cash moves or paperwork is filed."},
+ {t:3,q:"The directors announce that the company will be closed down. Which of these would NOT follow?",o:[
+  ["Assets continue to be shown at cost less depreciation","Correct (this would NOT follow). Cost less depreciation relies on the going concern assumption."],
+  ["Assets are shown at realisable (break-up) value","This does follow when a business is not a going concern."],
+  ["Long-term items are reclassified as current","This does follow, as everything will be settled soon."],
+  ["Extra costs such as redundancy pay are recognised","This does follow on a break-up basis."]],
+  exp:"Going concern is WHY assets are normally at cost less depreciation. Remove it and you switch to a break-up basis."},
+ {t:3,q:"Which of the following is NOT one of the four qualitative characteristics listed in the lecture?",o:[
+  ["Neutrality","Correct. Neutrality is a COMPONENT of reliability, not one of the four."],
+  ["Understandability","This is one of the four."],
+  ["Comparability","This is one of the four."],
+  ["Reliability","This is one of the four."]],
+  exp:"The four are understandability, relevance, comparability and reliability. Reliability contains faithful representation, substance over form, neutrality, prudence and completeness."},
+ {t:3,q:"Sara 'sells' her £20,000 oven to a finance company and leases it back for 5 years, paying fees equal to loan repayments. She continues to use and insure it. Which principle requires her NOT to record a £5,000 profit on sale?",o:[
+  ["Substance over form","Correct. In substance it is a loan secured on the oven, not a sale."],
+  ["Prudence","Prudence is about caution under uncertainty; the issue here is what the deal really is."],
+  ["Comparability","Nothing here concerns comparisons over time or between businesses."],
+  ["Materiality","The problem is the nature of the transaction, not its size."]],
+  exp:"Form (contract says 'sale') vs substance (she keeps the risks and benefits and repays like a loan). Report the substance."},
+ {t:3,sub:"Calculation",q:"An asset will produce a single net cash inflow of £26,620 in THREE years' time. The discount rate is 10%. What is its present value?",o:[
+  ["£20,000","Correct. 26,620 ÷ 1.331."],
+  ["£22,000","You discounted for only two years (÷ 1.21)."],
+  ["£24,200","You discounted for only one year (÷ 1.10)."],
+  ["£18,634","You took 30% off instead of discounting."]],
+  steps:["(1.10)³ = 1.10 × 1.10 × 1.10 = 1.331","PV = 26,620 ÷ 1.331 = £20,000"],
+  exp:"PV = FV ÷ (1 + r)ⁿ. Discounting compounds; it is not a simple percentage deduction."},
+ {t:3,sub:"Calculation",q:"£14,520 will be received in two years. Using a 10% discount rate, what is its present value?",o:[
+  ["£12,000","Correct. 14,520 ÷ 1.21."],
+  ["£13,200","That discounts for only one year."],
+  ["£11,616","You took 20% off (14,520 × 0.8)."],
+  ["£14,520","That is the undiscounted amount."]],
+  steps:["(1.10)² = 1.21","PV = 14,520 ÷ 1.21 = £12,000"],
+  exp:"For two years divide by 1.21, not by 1.20 and not by subtracting 20%."},
+ {t:3,q:"The amount a business would receive if it sold its van today is which measurement basis?",o:[
+  ["Realisable value","Correct. 'Sell today' = realisable value."],
+  ["Current cost","Current cost is what it would cost to REPLACE the van today."],
+  ["Historical cost","That is the amount originally paid."],
+  ["Present value","That is future cash flows discounted to today."]],
+  exp:"Historical = past; current cost = replace today; realisable = sell today; present value = future cash in today's money."},
+ {t:3,q:"A £2,000 inventory loss, against operating profit of £60m, turns out to have been caused by a director's fraud. How should materiality be judged?",o:[
+  ["It may be material because of its nature, even though it is small","Correct. Materiality depends on importance as well as size."],
+  ["It is immaterial because it is tiny compared with profit","Size alone is not the test; fraud makes the nature important."],
+  ["It breaches the going concern assumption","Nothing suggests the business will stop trading."],
+  ["It is only a comparability issue","Comparability is unaffected by this."]],
+  exp:"Usually a £2,000 loss against £60m profit would be immaterial. But the lecture warns that a small amount caused by fraud may still need to be shown."},
+ {t:3,q:"A company switches its inventory method from average cost to FIFO. What best protects comparability?",o:[
+  ["Disclose the change, the reason and last year's profit on the new basis","Correct."],
+  ["Make the change without comment, as both methods are acceptable","A silent change breaks comparability."],
+  ["Never change any accounting policy","Policies may change when there is a good reason."],
+  ["Adopt the method used by its main competitor without disclosure","It must still be explained."]],
+  exp:"Users must be able to compare years. A change is allowed, but the reason and effect must be shown."},
+ {t:3,q:"A shareholder prefers land to be shown at its market value of £20m rather than its historical cost of £5m. Which statement is correct?",o:[
+  ["Market value is more relevant, but historical cost is more reliable","Correct. This is the relevance–reliability trade-off."],
+  ["Market value is both more relevant and more reliable","Market values change and are harder to prove, so they are less reliable."],
+  ["Historical cost is more relevant because it is backed by an invoice","An invoice makes it reliable, not more relevant to today's decisions."],
+  ["Both are equally relevant and reliable","That is why the Framework allows several measurement bases: they differ."]],
+  exp:"There is no single best basis: the most relevant measure is not always the most reliable."},
+ {t:3,q:"Reporting before all aspects of a transaction are known improves timeliness but reduces:",o:[
+  ["Reliability","Correct. Estimates make the information less certain."],
+  ["Understandability","Understandability is not directly affected."],
+  ["Cost","Cost is a separate constraint."],
+  ["Materiality","Materiality is about size and importance."]],
+  exp:"Timeliness swaps some reliability for relevance."},
+ {t:3,q:"Statements are NOT neutral if they are:",o:[
+  ["Prepared to achieve a predetermined result","Correct. Neutrality means free from bias."],
+  ["Cautious about recognising uncertain income","That is prudence (which can clash with neutrality, but is not itself a lack of neutrality in the lecture's example)."],
+  ["Showing comparative figures for last year","That supports comparability."],
+  ["Prepared in line with international standards","That supports comparability."]],
+  exp:"Neutrality = free from bias. Shaping the numbers to reach a chosen result is the opposite."},
+
+ // ---------- Topic 4 ----------
+ {t:4,q:"Which statement reports an entity's financial ADAPTABILITY?",o:[
+  ["Statement of cash flows","Correct."],
+  ["Statement of financial position","It shows financial position."],
+  ["Income statement","It shows financial performance."],
+  ["Notes to the accounts","Notes are not one of the three primary statements."]],
+  exp:"Position = SOFP; performance = income statement; adaptability = statement of cash flows."},
+ {t:4,sub:"Calculation",q:"During the year a business sold an old machine for £8,500, bought equipment for £32,000, bought a patent for £4,000, issued shares for £50,000, repaid a loan of £12,000 and paid suppliers £15,000. What is the net cash flow from INVESTING activities?",o:[
+  ["£27,500 outflow","Correct."],
+  ["£23,500 outflow","You left out the patent. Buying an intangible non-current asset is also investing."],
+  ["£44,500 outflow","You treated the sale proceeds as an outflow."],
+  ["£10,500 inflow","You included financing flows (shares and loan repayment)."]],
+  steps:["Investing = buying/selling non-current assets only","= +8,500 − 32,000 − 4,000","= −£27,500 (outflow)","Shares and loan = financing; suppliers = operating"],
+  exp:"Classify each flow first, then net only the investing items."},
+ {t:4,sub:"Calculation",q:"Using the same data (shares issued £50,000; loan repaid £12,000; other flows as before), what is the net cash flow from FINANCING activities?",o:[
+  ["£38,000 inflow","Correct. 50,000 − 12,000."],
+  ["£62,000 inflow","You added the loan repayment instead of deducting it."],
+  ["£50,000 inflow","You left out the loan repayment."],
+  ["£23,000 inflow","You included the payment to suppliers (an operating flow)."]],
+  steps:["Financing = shares, raising/repaying loans","= +50,000 − 12,000 = +£38,000"],
+  exp:"Repaying a loan is a financing OUTFLOW."},
+ {t:4,sub:"Calculation",q:"Net operating cash flow is +£42,000, net investing −£67,500 and net financing +£18,000. What is the change in cash?",o:[
+  ["Decrease of £7,500","Correct. 42,000 − 67,500 + 18,000."],
+  ["Increase of £7,500","The sign is wrong: investing outflows exceed the other inflows."],
+  ["Decrease of £43,500","You treated financing as an outflow."],
+  ["Increase of £127,500","You added all three as inflows."]],
+  steps:["Change in cash = operating + investing + financing","= 42,000 + (−67,500) + 18,000 = −£7,500"],
+  exp:"Keep the signs: investing was an outflow, financing an inflow."},
+ {t:4,sub:"Calculation",q:"For the month: revenue £18,400; cost of goods sold £9,650; wages £3,900; gas £620; depreciation £1,150. What is the profit?",o:[
+  ["£3,080","Correct."],
+  ["£4,230","You ignored depreciation because it is not cash. It is still an expense."],
+  ["£8,750","That is gross profit only."],
+  ["£15,320","That is total costs, not profit."]],
+  steps:["Gross profit = 18,400 − 9,650 = £8,750","Other expenses = 3,900 + 620 + 1,150 = £5,670","Profit = 8,750 − 5,670 = £3,080"],
+  exp:"Depreciation is a non-cash EXPENSE: it reduces profit even though no cash leaves."},
+ {t:4,sub:"Calculation",q:"A bank ledger opens with a £60,000 debit (capital). Then: rent paid £2,500; fittings paid £12,000; cash sales received £9,500; wages paid £3,800. How is the closing balance shown?",o:[
+  ["£51,200","Correct. It is a debit balance, shown as a positive number."],
+  ["(£51,200)","Brackets show a CREDIT balance; this account is in debit."],
+  ["£32,200","You treated the sales receipt as a payment."],
+  ["£87,800","You added the payments instead of deducting them."]],
+  steps:["Receipts (debits): 60,000 + 9,500 = 69,500","Payments (credits): 2,500 + 12,000 + 3,800 = 18,300","Balance = 69,500 − 18,300 = £51,200 debit (positive)"],
+  exp:"In the bank account money in is a debit, money out a credit. A debit balance is shown positive."},
+ {t:4,q:"Greenfield School returns uniforms invoiced at £350 and a credit note is issued. Which entry is correct in the seller's books?",o:[
+  ["Debit Sales returns, Credit Trade receivables","Correct. Sales returns is a debit and the school now owes less."],
+  ["Debit Trade receivables, Credit Sales returns","This is the wrong way round."],
+  ["Debit Sales, Credit Bank","No cash was involved, and returns have their own account."],
+  ["Debit Trade payables, Credit Purchases returns","That is the entry for goods sent back TO a supplier."]],
+  exp:"Goods back from a customer: Dr Sales returns, Cr Trade receivables. Goods back to a supplier: Dr Trade payables, Cr Purchases returns."},
+ {t:4,q:"Khan sends back £1,000 of faulty goods to his supplier, Northline. Which entry is correct in Khan's books?",o:[
+  ["Debit Trade payables, Credit Purchases returns","Correct. Khan owes less, and purchases are reduced via a separate returns account."],
+  ["Debit Purchases returns, Credit Trade payables","This is the wrong way round."],
+  ["Debit Sales returns, Credit Trade receivables","That is for goods returned BY a customer."],
+  ["Debit Bank, Credit Purchases","No cash moved, and returns are not deducted directly from Purchases."]],
+  exp:"A credit note cancels part of a credit purchase, so the amount owed falls (debit the liability)."},
+ {t:4,q:"Clothing is bought on credit for £18,000. What is the journal entry?",o:[
+  ["Debit Purchases £18,000, Credit Trade payables £18,000","Correct."],
+  ["Debit Trade payables, Credit Purchases","This is the wrong way round."],
+  ["Debit Purchases, Credit Bank","It was on credit, not paid from the bank."],
+  ["Debit Inventory, Credit Sales","Sales are not involved in a purchase."]],
+  exp:"Buying on credit creates a liability (credit Trade payables)."},
+ {t:4,sub:"Calculation",q:"A trial balance has debit balances: Bank £51,600, Fittings £12,000, Rent £2,500, Purchases £18,000, Drawings £4,000, Wages £1,400. Credit balances: Capital £60,000, Sales £25,000 and Trade payables. If it balances, what is Trade payables?",o:[
+  ["£4,500","Correct."],
+  ["£500","You left drawings out of the debit column. Drawings are a debit balance."],
+  ["£3,100","You left wages out of the debit column."],
+  ["£89,500","That is the debit total, not the payables figure."]],
+  steps:["Debits = 51,600 + 12,000 + 2,500 + 18,000 + 4,000 + 1,400 = £89,500","Credits = 60,000 + 25,000 + Payables","Payables = 89,500 − 85,000 = £4,500"],
+  exp:"Debit side: assets, expenses, drawings. Credit side: liabilities, capital, revenue."},
+ {t:4,q:"Which of these accounts has a CREDIT balance in the trial balance?",o:[
+  ["Purchases returns","Correct. Purchase returns reduce purchases (a debit), so they are a credit."],
+  ["Sales returns","Sales returns reduce sales (a credit), so they are a debit."],
+  ["Drawings","Drawings are a debit."],
+  ["Prepaid rent","A prepayment is an asset, so it is a debit."]],
+  exp:"Contra accounts take the opposite side to the account they reduce."},
+ {t:4,sub:"Calculation",q:"Inventory is bought for £8,500, £7,000 and £4,250. Goods costing £5,500 and £6,100 are then sold for a total of £14,800. What is the inventory balance?",o:[
+  ["£8,150","Correct."],
+  ["£4,950","You deducted the SELLING price instead of the cost."],
+  ["£19,750","You forgot to remove the goods sold."],
+  ["£11,600","That is the cost of goods sold."]],
+  steps:["Purchases = 8,500 + 7,000 + 4,250 = £19,750","Cost of goods sold = 5,500 + 6,100 = £11,600","Inventory = 19,750 − 11,600 = £8,150"],
+  exp:"Dr COGS, Cr Inventory at COST. The selling price goes to revenue."},
+ {t:4,sub:"Calculation",q:"Equipment cost £12,000 and is depreciated by £550 a month. What is its net amount after April and May?",o:[
+  ["£10,900","Correct."],
+  ["£11,450","That is after only one month."],
+  ["£13,100","You added depreciation."],
+  ["£1,100","That is accumulated depreciation, not the net amount."]],
+  steps:["Accumulated depreciation = 550 × 2 = £1,100","Net amount = 12,000 − 1,100 = £10,900"],
+  exp:"Accumulated depreciation sits next to cost, so the original cost stays visible."},
+ {t:4,q:"Which is the MOST likely reason a profitable business is short of cash?",o:[
+  ["It made large credit sales and paid cash for a new van","Correct. Credit sales boost profit before cash arrives; the van uses cash but is not an expense."],
+  ["Its drawings were recorded as an expense","Drawings are not an expense; that would not explain a cash shortage."],
+  ["Depreciation used up its cash","Depreciation is non-cash."],
+  ["Revenue is only recorded when cash arrives","That is the cash basis; under accruals revenue is recorded earlier."]],
+  exp:"Profit ≠ cash because of working capital (credit, inventory) and capital spending, loans and shares."},
+ {t:4,q:"Which stage comes between the accounting records and the financial statements?",o:[
+  ["Rules of measurement and disclosure","Correct."],
+  ["Practice of bookkeeping","That comes BEFORE the accounting records."],
+  ["Transactions and events","That is the very first step."],
+  ["Auditing","Auditing is not a step in the lecture's flow."]],
+  exp:"Transactions → bookkeeping → records → measurement & disclosure rules → statements."},
+
+ // ---------- Topic 5 ----------
+ {t:5,sub:"Calculation",q:"A machine costs £30,000. Installation costs £2,000, legal fees £500, commissioning (testing) £800 and the first-year servicing contract £900. At what cost is the machine recorded?",o:[
+  ["£33,300","Correct."],
+  ["£34,200","You capitalised the servicing contract, which is a running cost (expense)."],
+  ["£32,000","You only added installation."],
+  ["£30,000","You left out all the costs of getting it ready to use."]],
+  steps:["Cost = price + costs of getting it ready to use","= 30,000 + 2,000 + 500 + 800 = £33,300","Servicing £900 is a running cost → P&L expense"],
+  exp:"Capitalise legal, installation and commissioning costs. Running costs are expenses."},
+ {t:5,sub:"Calculation",q:"An asset costs £48,000, has a residual value of £6,000 and a useful life of 7 years. What is the annual straight-line depreciation?",o:[
+  ["£6,000","Correct. (48,000 − 6,000) ÷ 7."],
+  ["£6,857","You ignored the residual value (48,000 ÷ 7)."],
+  ["£42,000","That is TOTAL depreciation."],
+  ["£4,800","That is 10% of cost, not the formula."]],
+  steps:["Depreciable amount = 48,000 − 6,000 = £42,000","Annual charge = 42,000 ÷ 7 = £6,000"],
+  exp:"Straight-line = (cost − residual) ÷ life."},
+ {t:5,sub:"Calculation",q:"An asset cost £36,500, residual value £4,500, life 8 years, straight-line. What is its NBV at the end of year 3?",o:[
+  ["£24,500","Correct."],
+  ["£20,000","You also deducted the residual value from NBV."],
+  ["£32,500","That is NBV after only one year."],
+  ["£22,812.50","You ignored residual value when calculating the annual charge."]],
+  steps:["Annual charge = (36,500 − 4,500) ÷ 8 = £4,000","Accumulated depreciation after 3 years = £12,000","NBV = 36,500 − 12,000 = £24,500"],
+  exp:"Residual value is used to work out the charge; it is not deducted again from NBV."},
+ {t:5,sub:"Calculation",q:"An asset costs £25,000 and is depreciated at 20% reducing balance. What is the depreciation charge in YEAR 3?",o:[
+  ["£3,200","Correct."],
+  ["£5,000","That is 20% of cost (straight-line style)."],
+  ["£4,000","That is the year 2 charge."],
+  ["£12,800","That is NBV at the end of year 3."]],
+  steps:["Y1: 20% × 25,000 = 5,000 → NBV 20,000","Y2: 20% × 20,000 = 4,000 → NBV 16,000","Y3: 20% × 16,000 = £3,200 → NBV 12,800"],
+  exp:"Reducing balance applies the rate to the opening NBV each year, so the charge keeps falling."},
+ {t:5,sub:"Calculation",q:"Motor vehicles cost £85,000 with accumulated depreciation of £30,600. Depreciation is 20% reducing balance. What is this year's charge?",o:[
+  ["£10,880","Correct. 20% × 54,400."],
+  ["£17,000","That is 20% of cost, not NBV."],
+  ["£6,120","That is 20% of accumulated depreciation."],
+  ["£43,520","That is the NBV after this year's charge."]],
+  steps:["NBV = 85,000 − 30,600 = £54,400","Charge = 20% × 54,400 = £10,880"],
+  exp:"Same logic as Smith Plc: (120,000 − 43,200) × 20% = 15,360."},
+ {t:5,sub:"Calculation",q:"Insurance of £4,800 is paid on 1 September for the year to 31 August. The year end is 31 December. What is the prepayment?",o:[
+  ["£3,200","Correct. 8 months (Jan–Aug) are unused."],
+  ["£1,600","That is the 4 months used (Sep–Dec), i.e. this year's expense."],
+  ["£4,800","That is the whole payment."],
+  ["£400","That is just one month."]],
+  steps:["Monthly cost = 4,800 ÷ 12 = £400","Months used by 31 Dec: Sep–Dec = 4 → expense £1,600","Months unused: Jan–Aug = 8 → prepayment 8 × 400 = £3,200"],
+  exp:"Prepayment = payment × unused months ÷ months covered; it is a current asset."},
+ {t:5,q:"Annual rent is £9,000. By the year end only £6,750 has been paid. What appears in the financial statements?",o:[
+  ["Rent expense £9,000; accrual (current liability) £2,250","Correct."],
+  ["Rent expense £6,750; accrual £2,250","The expense must include the unpaid amount used this year."],
+  ["Rent expense £9,000; prepayment (current asset) £2,250","Rent is underpaid, not paid in advance, so it is owed."],
+  ["Rent expense £6,750; no adjustment","That is the cash basis."]],
+  steps:["Expense = full year's cost = £9,000","Unpaid = 9,000 − 6,750 = £2,250 → accrual (current liability)"],
+  exp:"An accrual is ADDED to the expense and shown as a current liability."},
+ {t:5,sub:"Calculation",q:"Receivables before write-offs are £92,000. Bad debts of £4,000 are written off. The provision for doubtful debts is to be 5% of remaining receivables; the existing provision is £3,800. What is the total P&L charge for bad and doubtful debts?",o:[
+  ["£4,600","Correct. 4,000 write-off + 600 increase."],
+  ["£8,400","You charged the whole new provision instead of the increase."],
+  ["£4,800","You calculated the provision on receivables BEFORE the write-off."],
+  ["£600","You forgot the bad debt written off."]],
+  steps:["Remaining receivables = 92,000 − 4,000 = £88,000","New provision = 5% × 88,000 = £4,400","Increase = 4,400 − 3,800 = £600","P&L charge = 4,000 + 600 = £4,600"],
+  exp:"Write off first, then provide on what is left, and charge only the CHANGE in provision."},
+ {t:5,sub:"Calculation",q:"Using the same data (receivables £92,000, write-off £4,000, 5% provision), what is the net receivables figure in the SOFP?",o:[
+  ["£83,600","Correct. 88,000 − 4,400."],
+  ["£88,000","You forgot the provision."],
+  ["£84,200","You used the OLD provision (£3,800)."],
+  ["£87,400","You deducted only the increase in provision."]],
+  steps:["Receivables after write-off = £88,000","Less provision 5% = £4,400","Net = £83,600"],
+  exp:"In the SOFP the FULL provision is deducted; in the P&L only the change is charged."},
+ {t:5,sub:"Calculation",q:"Receivables are £60,000. The provision is to be 4% and the existing provision is £3,000. What is the effect on the P&L?",o:[
+  ["The provision falls by £600, reducing the charge (increasing profit)","Correct. New provision = 2,400; old = 3,000."],
+  ["A charge of £2,400","Only the change goes to the P&L, not the whole provision."],
+  ["A charge of £600 (an increase in the provision)","The provision has gone DOWN, not up."],
+  ["No effect: provisions only affect the SOFP","The change in provision does go through the P&L."]],
+  steps:["New provision = 4% × 60,000 = £2,400","Existing = £3,000 → decrease of £600","A decrease reduces the bad debt charge (credit to P&L)"],
+  exp:"An increase in provision is charged; a decrease is released (credited) back."},
+ {t:5,sub:"Calculation",q:"A sole trader takes goods costing £2,100 for personal use, 30% of the £3,000 phone bill is private, the business pays her £7,500 personal income tax, and she withdraws £18,000 cash. What are total drawings?",o:[
+  ["£28,500","Correct."],
+  ["£21,000","You treated income tax as a business expense. A sole trader's personal tax is a drawing."],
+  ["£27,600","You ignored the private use of the phone."],
+  ["£30,600","You included the whole phone bill instead of the 30% private part."]],
+  steps:["Goods at cost = £2,100","Private phone = 30% × 3,000 = £900","Personal income tax = £7,500","Cash = £18,000","Total = 2,100 + 900 + 7,500 + 18,000 = £28,500"],
+  exp:"Only business costs belong in the P&L. Personal items, including personal tax, are drawings."},
+ {t:5,sub:"Calculation",q:"Opening inventory £14,200; purchases £86,500; returns outward £3,700; goods taken by the owner at cost £1,200; closing inventory £16,800. What is the cost of sales?",o:[
+  ["£79,000","Correct."],
+  ["£80,200","You ignored the goods taken by the owner, which come out of purchases."],
+  ["£86,400","You ADDED returns outward instead of deducting them."],
+  ["£112,600","You added closing inventory instead of deducting it."]],
+  steps:["Purchases less returns and drawings = 86,500 − 3,700 − 1,200 = £81,600","Cost of sales = 14,200 + 81,600 − 16,800 = £79,000"],
+  exp:"Cost of sales = opening inventory + net purchases − closing inventory. Goods taken by the owner reduce purchases."},
+ {t:5,sub:"Calculation",q:"Sales £162,000; returns inward £4,500; cost of sales £79,000. What is gross profit?",o:[
+  ["£78,500","Correct."],
+  ["£83,000","You ignored returns inward."],
+  ["£87,500","You added returns inward."],
+  ["£74,000","You deducted returns inward twice."]],
+  steps:["Net sales = 162,000 − 4,500 = £157,500","Gross profit = 157,500 − 79,000 = £78,500"],
+  exp:"Returns inward (sales returns) reduce sales; returns outward reduce purchases."},
+ {t:5,sub:"Calculation",q:"A plc has gross profit £98,300 and operating expenses £54,750. It has an £80,000 loan at 9% interest (none paid yet) and tax for the year of £8,400. A dividend of £5,000 is proposed but not recognised. What is the profit for the year?",o:[
+  ["£27,950","Correct."],
+  ["£22,950","You deducted the proposed dividend. Dividends are not an expense and this one is not even recognised."],
+  ["£36,350","You ignored tax. For a company, tax is a P&L expense."],
+  ["£35,150","You ignored the loan interest, which must be accrued even though unpaid."]],
+  steps:["Profit before interest and tax = 98,300 − 54,750 = £43,550","Interest = 9% × 80,000 = £7,200 (accrued)","Tax = £8,400","Profit for the year = 43,550 − 7,200 − 8,400 = £27,950"],
+  exp:"Company P&L: PBIT − finance cost − tax = profit for the year, which then goes to retained earnings."},
+ {t:5,q:"Land carried at £400,000 is revalued to £465,000. The revaluation reserve was £35,000. What are the new reserve and the effect on profit?",o:[
+  ["Reserve £100,000; profit unchanged","Correct. 35,000 + 65,000, and the gain bypasses the P&L."],
+  ["Reserve £35,000; profit up £65,000","Revaluation gains are not trading income."],
+  ["Reserve £100,000; profit up £65,000","The gain cannot be counted twice; it only goes to the reserve."],
+  ["Reserve £65,000; profit unchanged","You forgot the opening reserve of £35,000."]],
+  steps:["Gain = 465,000 − 400,000 = £65,000","Reserve = 35,000 + 65,000 = £100,000","P&L not affected"],
+  exp:"Revaluation reserve is part of equity. Profit is not affected."},
+ {t:5,q:"Which of the following is CAPITAL expenditure?",o:[
+  ["Fitting a more powerful engine that increases a bus's capacity and extends its life","Correct. It improves the asset (better output, longer life)."],
+  ["Replacing a worn bus engine with an identical one","That restores original condition: a repair."],
+  ["Replacing a roof damaged in a storm","That is a repair, expensed in the P&L."],
+  ["Routine servicing of the bus","That is a running cost."]],
+  exp:"Improvements add new future benefit and are capitalised. Repairs only keep the benefit already expected."},
+ {t:5,q:"Which item appears in a company's P&L but NOT in a sole trader's?",o:[
+  ["Tax expense on profits","Correct. A sole trader's tax is personal and is treated as drawings."],
+  ["Loan interest","Both can show interest as a finance cost."],
+  ["Depreciation","Both have depreciation."],
+  ["Wages","Both have wages."]],
+  exp:"A company is its own legal person and pays its own tax; a sole trader is taxed personally."},
+ {t:5,q:"Net book value is best described as:",o:[
+  ["Cost less accumulated depreciation","Correct."],
+  ["The asset's current market value","NBV is a calculation, not a market value."],
+  ["Cost less residual value","That is the depreciable amount (total depreciation)."],
+  ["The cost to replace the asset today","That is current cost."]],
+  exp:"NBV, also called depreciated cost = cost − accumulated depreciation."},
+
+ // ---------- Topic 6 ----------
+ {t:6,sub:"Calculation",q:"Inventory £22,800; receivables (net) £87,885; prepayment £2,000; cash £155,000. Trade payables £64,344; accrued interest £11,640; tax payable £10,000; 5-year bank loan £116,400. What is working capital?",o:[
+  ["£181,701","Correct."],
+  ["£65,301","You deducted the bank loan, which is non-current."],
+  ["£193,341","You left out accrued interest (a current liability)."],
+  ["£26,701","You left out cash."]],
+  steps:["Current assets = 22,800 + 87,885 + 2,000 + 155,000 = £267,685","Current liabilities = 64,344 + 11,640 + 10,000 = £85,984","Working capital = 267,685 − 85,984 = £181,701"],
+  exp:"Working capital uses CURRENT items only; the loan is non-current."},
+ {t:6,sub:"Calculation",q:"Inventory: P cost £14,600, NRV £13,200; Q cost £9,350, NRV £11,800; R cost £6,400, NRV £6,050; S cost £2,900, NRV £4,100. At what amount is inventory shown?",o:[
+  ["£31,500","Correct. Lower of cost and NRV, item by item."],
+  ["£33,250","That is total cost; it ignores P and R falling below cost."],
+  ["£31,850","You used cost for R although its NRV is lower."],
+  ["£35,150","That is total NRV; it counts unrealised profit on Q and S."]],
+  steps:["P: lower = 13,200 (NRV)","Q: lower = 9,350 (cost)","R: lower = 6,050 (NRV)","S: lower = 2,900 (cost)","Total = 13,200 + 9,350 + 6,050 + 2,900 = £31,500"],
+  exp:"Compare cost and NRV for EACH item; never net gains against losses."},
+ {t:6,q:"Goods cost £12,000 and are now expected to sell for only £9,000. At what amount are they carried?",o:[
+  ["£9,000","Correct. Lower of cost and NRV."],
+  ["£12,000","That overstates the asset."],
+  ["£3,000","That is the loss, not the carrying amount."],
+  ["£21,000","You added cost and NRV."]],
+  exp:"Prudence: when the expected selling price falls below cost, write down to NRV now."},
+ {t:6,sub:"Calculation",q:"Insurance of £5,400 is paid on 1 August for 12 months. The year end is 31 December. What is the prepayment?",o:[
+  ["£3,150","Correct. 7 months unused."],
+  ["£2,250","That is the 5 months used (the expense)."],
+  ["£2,700","You assumed 6 months unused."],
+  ["£5,400","That is the whole payment."]],
+  steps:["Monthly = 5,400 ÷ 12 = £450","Used Aug–Dec = 5 months = £2,250","Unused Jan–Jul = 7 months = 7 × 450 = £3,150"],
+  exp:"Count the months carefully: August to December inclusive is 5 months."},
+ {t:6,q:"Which is an 'other debtor' rather than a trade receivable?",o:[
+  ["A tax refund due to the business","Correct. It does not arise from sales."],
+  ["A customer's unpaid sales invoice","That is a trade receivable."],
+  ["Rent paid in advance","That is a prepayment."],
+  ["An unpaid supplier invoice","That is a payable (liability)."]],
+  exp:"Trade receivables come from credit sales. Other debtors include loans to employees or other businesses and tax refunds."},
+ {t:6,q:"A customer owing £2,600 has been declared bankrupt. The debt should be:",o:[
+  ["Written off as a bad debt","Correct. It is known that the customer will not pay."],
+  ["Added to the provision for doubtful debts only","A provision is for debts that MIGHT not be paid; this one definitely won't."],
+  ["Left in receivables until the end of the bankruptcy","That would overstate assets, against prudence."],
+  ["Accrued as a current liability","Accruals are unpaid expenses, not lost receivables."]],
+  exp:"Bad debt = known loss, written off. Doubtful debt = risk, covered by a provision."},
+ {t:6,q:"Shares bought as a short-term investment for £10,000 have a fair value of £9,200 at the year end. How are they reported?",o:[
+  ["At £9,200, with an £800 loss in the income statement","Correct. Current investments are marked to market through the income statement."],
+  ["At £10,000, with no entry until they are sold","Current investments are measured at fair value."],
+  ["At £9,200, with £800 taken to the revaluation reserve","That treatment is for revalued land and buildings, not current investments."],
+  ["At £10,000, with the fall disclosed only in the notes","The change must go through the income statement."]],
+  exp:"Fair value is more relevant for investments that can be sold easily."},
+ {t:6,sub:"Calculation",q:"Total assets less current liabilities are £384,560 and non-current liabilities are £95,000. What are net assets?",o:[
+  ["£289,560","Correct."],
+  ["£479,560","You added the non-current liabilities."],
+  ["£384,560","You ignored the non-current liabilities."],
+  ["£95,000","That is only the loan."]],
+  steps:["Net assets = TALCL − NCL = 384,560 − 95,000 = £289,560"],
+  exp:"Net assets = capital."},
+ {t:6,sub:"Calculation",q:"A sole trader's opening capital is £148,300. During the year she introduces £5,000, makes a profit of £41,750 and draws £26,480. What capital is shown in the SOFP?",o:[
+  ["£168,570","Correct."],
+  ["£163,570","You left out the capital introduced."],
+  ["£195,050","You ignored drawings."],
+  ["£221,530","You added drawings."]],
+  steps:["148,300 + 5,000 + 41,750 = £195,050","Less drawings 26,480 → £168,570"],
+  exp:"Capital = opening + introduced + profit − drawings, and it must equal net assets."},
+ {t:6,sub:"Calculation",q:"A plc's opening retained earnings are £136,420 and profit for the year is £28,915. A dividend of £7,500 was PAID during the year and a further £4,000 is PROPOSED but not recognised. What are closing retained earnings?",o:[
+  ["£157,835","Correct."],
+  ["£153,835","You also deducted the proposed dividend, which is not recognised."],
+  ["£165,335","You ignored the dividend actually paid."],
+  ["£161,335","You deducted the proposed dividend instead of the paid one."]],
+  steps:["136,420 + 28,915 = £165,335","Less dividend paid 7,500 = £157,835","Proposed £4,000 is not recognised (no deduction)"],
+  exp:"As in Smith Plc, a proposed dividend is not recorded as owed."},
+ {t:6,q:"A business has current assets very much greater than its current liabilities. The main concern is that:",o:[
+  ["Finance is tied up that could be used to expand non-current assets","Correct."],
+  ["It may be unable to pay its debts","That is the risk of LOW working capital."],
+  ["Its inventory must be overvalued","Nothing suggests that."],
+  ["Its drawings are too high","Not related."]],
+  exp:"Balance is key: too low = payment risk; too high = idle money."},
+ {t:6,q:"Why is work in progress riskier than finished goods?",o:[
+  ["It carries non-completion risk on top of the usual risks","Correct."],
+  ["It is always worth less than cost","Not always."],
+  ["It is a liability until finished","It is an asset."],
+  ["It cannot be measured at all","It is measured at the cost of work done, checked carefully by managers."]],
+  exp:"WIP might never be finished, so it has an extra layer of risk."},
+ {t:6,q:"How is a business's cash at bank verified?",o:[
+  ["By the bank statement","Correct."],
+  ["By its sales invoices","Invoices do not confirm a bank balance."],
+  ["By management estimate","Cash is never estimated."],
+  ["By the trial balance","A trial balance only lists the ledger balance; it does not verify it."]],
+  exp:"Cash is the most certain current asset: count it or check the bank statement."},
+ {t:6,q:"In the working capital cycle, what is the next step after goods are sold on credit?",o:[
+  ["Receivables are collected as cash","Correct."],
+  ["Inventory is bought","That is the first step, before the sale."],
+  ["Payables become receivables","Payables are what the business owes; they never become receivables."],
+  ["Cash is turned into inventory","That happens before the sale."]],
+  exp:"Inventory → receivables → cash → pay suppliers (and round again)."},
+ {t:6,q:"Electricity for December of £450 has not been recorded at the year end. What is the effect of correcting it?",o:[
+  ["Expenses ↑ £450 and a current liability (accrual) of £450","Correct."],
+  ["Expenses ↓ £450 and a current asset of £450","That would be a prepayment."],
+  ["No effect until the bill is paid","That is the cash basis."],
+  ["Drawings ↑ £450","It is a business cost, not a private one."]],
+  exp:"Accruals increase expenses and create a current liability."},
+ {t:6,q:"Why might recognising a current asset be questioned?",o:[
+  ["Doubt about the expected benefit or about reliable measurement","Correct."],
+  ["It is too large","Size alone is not the issue."],
+  ["It is also a liability","An item cannot be both."],
+  ["It was free","Cost is not the test; benefit and measurement are."]],
+  exp:"Recognition needs the definition met and useful, faithful information. Cash is the most certain; WIP and doubtful debts are less certain."}
+];
+
+/* ============ ADVANCED VARIANTS ============ */
+// multi-select: o = [text, isCorrect, why]
+const MULTI = [
+ {t:1,q:"Which of the following are NOT expenses? (Select ALL that apply)",o:[
+  ["Owner's drawings",true,"Drawings reduce capital directly; they are not a cost of running the business."],
+  ["Purchase of a delivery van",true,"The van is a non-current asset. Only its depreciation becomes an expense."],
+  ["Repayment of part of a bank loan",true,"Repaying the loan reduces a liability; only interest is an expense."],
+  ["A sole trader's personal income tax paid by the business",true,"This is a drawing, not a business expense."],
+  ["Interest on a bank loan",false,"Interest IS an expense (finance cost)."],
+  ["A bad debt written off",false,"A bad debt written off IS an expense."]],
+  exp:"Ask: is it a cost of running the business in this period? Asset purchases, loan repayments and anything personal to the owner are not expenses."},
+ {t:1,q:"Which are features of MANAGEMENT accounting? (Select ALL that apply)",o:[
+  ["Can focus on one product or department",true,"It is detailed and flexible."],
+  ["Can include forecasts and look ahead",true,"Managers plan the future."],
+  ["Produced whenever it is needed",true,"There is no fixed annual cycle."],
+  ["Required by the Companies Act",false,"The law applies to financial accounting."],
+  ["Must follow IFRS",false,"Management accounting has no compulsory rules."],
+  ["Published to the public each year",false,"That is financial accounting."]],
+  exp:"Management accounting is internal, flexible and forward-looking; financial accounting is external, regulated and historical."},
+ {t:2,q:"Which transactions leave TOTAL ASSETS unchanged? (Select ALL that apply)",o:[
+  ["Buying equipment for cash",true,"Equipment ↑ and cash ↓ by the same amount."],
+  ["Collecting cash from a credit customer",true,"Cash ↑ and receivables ↓."],
+  ["Paying rent in advance in cash",true,"Cash ↓ and prepayment (an asset) ↑."],
+  ["Paying a supplier",false,"Cash ↓ and payables ↓, so total assets FALL."],
+  ["The owner introducing a van",false,"Assets ↑ and ownership interest ↑."],
+  ["Buying inventory on credit",false,"Assets ↑ and liabilities ↑."]],
+  exp:"An asset-for-asset swap leaves the total unchanged. Anything involving a liability or the owner changes the total."},
+ {t:2,q:"Which would be recognised as ASSETS of the business? (Select ALL that apply)",o:[
+  ["Cash in the business bank account",true,"Controlled, from past events, clear benefit."],
+  ["Raw materials in the store",true,"The benefit is fairly certain."],
+  ["Shares held in another company",true,"Listed as an asset example in the lecture."],
+  ["A skilled and loyal workforce",false,"Not controlled; benefit uncertain."],
+  ["A £50,000 advertising campaign",false,"No evidence that cash will flow in."],
+  ["The owner's personal car kept at home",false,"Not controlled by the business."]],
+  exp:"Apply the three tests (benefit, control, past event) plus the recognition criteria."},
+ {t:3,q:"According to the lecture, which are components of RELIABILITY? (Select ALL that apply)",o:[
+  ["Faithful representation",true,"One of the five components."],
+  ["Substance over form",true,"One of the five components."],
+  ["Neutrality",true,"One of the five components."],
+  ["Prudence",true,"One of the five components."],
+  ["Completeness",true,"One of the five components."],
+  ["Predictive value",false,"That is part of RELEVANCE."],
+  ["Timeliness",false,"That is a constraint."],
+  ["Comparability",false,"That is a separate qualitative characteristic."]],
+  exp:"Reliability = faithful representation, substance over form, neutrality, prudence and completeness."},
+ {t:3,q:"A director combines profitable drinks sales with loss-making food sales as one 'food and drink' line to keep competitors in the dark. Which principles does this breach? (Select ALL that apply)",o:[
+  ["Neutrality",true,"It is presented to achieve a chosen result."],
+  ["Completeness",true,"It hides information shareholders need."],
+  ["Going concern",false,"Nothing suggests the business will stop."],
+  ["Accrual basis",false,"Timing of recognition is not the issue."],
+  ["Historical cost measurement",false,"Measurement basis is not the issue."]],
+  exp:"The lecture uses this example for BOTH neutrality and completeness."},
+ {t:3,q:"Which are measurement bases described in the Framework lecture? (Select ALL that apply)",o:[
+  ["Historical cost",true,"Amount paid at the time."],
+  ["Current cost",true,"Cost to replace today."],
+  ["Realisable value",true,"Amount from selling today."],
+  ["Present value",true,"Future cash discounted to today."],
+  ["Selling price plus a profit margin",false,"Not a measurement basis; it would recognise profit early."],
+  ["Tax written-down value",false,"Tax rules are not part of the Framework."]],
+  exp:"Four bases; each answers a different question about the same item."},
+ {t:4,q:"Which are INVESTING cash flows? (Select ALL that apply)",o:[
+  ["Cash paid for a delivery van",true,"Buying a non-current asset."],
+  ["Proceeds from selling an old machine",true,"Selling a non-current asset."],
+  ["Cash paid for a patent",true,"A patent is an intangible non-current asset."],
+  ["Cash from issuing shares",false,"Financing."],
+  ["Repayment of a bank loan",false,"Financing."],
+  ["Cash paid to suppliers",false,"Operating."]],
+  exp:"Investing = buying and selling non-current assets, tangible or intangible."},
+ {t:4,q:"Which accounts normally have DEBIT balances in a trial balance? (Select ALL that apply)",o:[
+  ["Drawings",true,"Drawings reduce ownership interest."],
+  ["Trade receivables",true,"An asset."],
+  ["Sales returns",true,"Reduces sales (a credit), so it is a debit."],
+  ["Rent expense",true,"An expense."],
+  ["Purchases returns",false,"Reduces purchases, so it is a credit."],
+  ["Trade payables",false,"A liability (credit)."],
+  ["Capital",false,"Ownership interest (credit)."]],
+  exp:"Debits: assets, expenses, drawings. Credits: liabilities, capital, revenue. Contra accounts sit on the opposite side."},
+ {t:5,q:"Which costs are CAPITALISED (added to the asset)? (Select ALL that apply)",o:[
+  ["Installation of a new machine",true,"Getting it ready to use."],
+  ["Legal fees on buying a building",true,"Getting it ready to use."],
+  ["Commissioning and testing a machine",true,"Getting it ready to use."],
+  ["Building an extension to a shop",true,"An improvement."],
+  ["Replacing a storm-damaged roof",false,"A repair, so an expense."],
+  ["Annual servicing of a machine",false,"A running cost, so an expense."]],
+  exp:"Capitalise costs of getting the asset ready and genuine improvements; expense repairs and running costs."},
+ {t:5,q:"For a sole trader, which of these are DRAWINGS? (Select ALL that apply)",o:[
+  ["Goods taken from inventory for personal use",true,"At cost, removed from purchases."],
+  ["The private share of the telephone bill",true,"The private part of an expense moves to drawings."],
+  ["Her personal income tax paid from the business account",true,"Personal tax is not a business expense."],
+  ["Cash taken from the till for herself",true,"Classic drawings."],
+  ["Wages paid to shop staff",false,"A business expense."],
+  ["Interest on the business loan",false,"A business finance cost."]],
+  exp:"Anything that benefits the owner personally is drawings."},
+ {t:6,q:"Which of the following are CURRENT ASSETS? (Select ALL that apply)",o:[
+  ["Work in progress",true,"Part of inventories."],
+  ["Prepaid insurance",true,"Prepayments are current assets."],
+  ["Accrued income",true,"Listed with prepayments as a current asset."],
+  ["Short-term deposit",true,"Readily turned into cash."],
+  ["Current investments",true,"Easily sold."],
+  ["Shop shelving",false,"Non-current: kept for continuing use."],
+  ["Accrued electricity",false,"A current LIABILITY."],
+  ["Patent",false,"A non-current intangible asset."]],
+  exp:"Current assets are expected to be sold or turned into cash within about 12 months."},
+ {t:6,q:"Which statements are consistent with PRUDENCE? (Select ALL that apply)",o:[
+  ["An expected loss on an inventory item is recognised now",true,"Losses are recognised as soon as expected."],
+  ["An expected profit on inventory is not recognised until the goods are sold",true,"Profits are recognised when realised."],
+  ["Receivables are reduced by a provision for doubtful debts",true,"Do not overstate assets."],
+  ["A possible lawsuit is disclosed in the notes",true,"Prudence says mention contingent liabilities."],
+  ["Inventory is written UP to NRV when NRV exceeds cost",false,"That would recognise profit before sale."],
+  ["A gain on one inventory item is offset against a loss on another",false,"Items are valued one by one."]],
+  exp:"Prudence: don't overstate assets or income; don't understate liabilities or expenses."}
+];
+
+const AR_OPTS = [
+ "Both A and R are true, and R correctly explains A",
+ "Both A and R are true, but R does NOT explain A",
+ "A is true, but R is false",
+ "A is false, but R is true",
+ "Both A and R are false"
+];
+// a = index into AR_OPTS
+const AR = [
+ {t:1,A:"Drawings do not reduce profit.",R:"Drawings are a withdrawal of resources by the owner, not a cost of running the business.",a:0,exp:"A is true, R is true, and R is exactly WHY drawings never reduce profit."},
+ {t:1,A:"Partners have unlimited personal liability for the partnership's debts.",R:"A partnership agreement must be in writing to be valid.",a:2,exp:"A is true (joint and several liability). R is false: the agreement does not have to be written."},
+ {t:2,A:"An advertising campaign paid for in cash is recognised as an asset.",R:"The business paid cash for the campaign.",a:3,exp:"A is false: the benefit is uncertain, so it is not an asset. R is true (it was paid for), but paying for something does not make it an asset."},
+ {t:2,A:"Collecting cash from a credit customer does not change total assets.",R:"Cash increases and trade receivables decrease by the same amount.",a:0,exp:"Both true, and R explains A: it is an asset-for-asset swap."},
+ {t:3,A:"Assets are normally shown at cost less depreciation rather than at break-up value.",R:"Financial statements are normally prepared on the going concern assumption.",a:0,exp:"Both true, and the going concern assumption is precisely why break-up values are not used."},
+ {t:3,A:"The accrual basis is one of the four qualitative characteristics.",R:"Under the accrual basis, transactions are recorded when they occur rather than when cash moves.",a:3,exp:"A is false: accrual basis is an UNDERLYING ASSUMPTION. R correctly describes the accrual basis."},
+ {t:3,A:"The market value of land may be more relevant than its historical cost.",R:"Market value is always more reliable than historical cost.",a:2,exp:"A is true. R is false: market values are harder to prove, so they are usually LESS reliable."},
+ {t:3,A:"£11,000 receivable in one year has a present value of £9,900 at 10%.",R:"Present value is found by dividing future cash by (1 + r)ⁿ.",a:3,exp:"A is false: 11,000 ÷ 1.10 = £10,000. R is the correct formula (and it proves A wrong)."},
+ {t:4,A:"A trial balance that agrees proves the accounts contain no errors.",R:"Every transaction is recorded with equal debits and credits.",a:3,exp:"A is false: errors like wrong-account postings or omissions still balance. R is true."},
+ {t:4,A:"Buying a delivery van for cash is an investing outflow.",R:"Investing activities include buying and selling non-current assets.",a:0,exp:"Both true, and R explains A."},
+ {t:5,A:"Depreciation provides the cash needed to replace an asset.",R:"Depreciation is a non-cash expense.",a:3,exp:"A is false: depreciation sets no cash aside. R is true: no cash leaves when depreciation is recorded."},
+ {t:5,A:"Under reducing balance, the annual charge falls each year.",R:"The fixed percentage is applied to a net book value that shrinks every year.",a:0,exp:"Both true; the shrinking NBV is why the charge falls."},
+ {t:5,A:"A gain on revaluing land is reported as income in the P&L.",R:"Land and buildings are not depreciated in the lecture examples.",a:3,exp:"A is false: the gain goes to the revaluation reserve in equity. R is true but irrelevant to A."},
+ {t:5,A:"A company's tax on profits is an expense in its P&L.",R:"A company is a separate legal person that pays its own tax.",a:0,exp:"Both true, and R explains A. (A sole trader's tax is a drawing.)"},
+ {t:6,A:"Inventory must be written down when NRV falls below cost.",R:"Prudence requires expected losses to be recognised now, but profits only when realised.",a:0,exp:"Both true, and prudence is the reason for the lower of cost and NRV rule."},
+ {t:6,A:"A high level of working capital is always desirable.",R:"Working capital equals current assets minus current liabilities.",a:3,exp:"A is false: too much means idle money. R is the correct formula."},
+ {t:6,A:"Changes in the fair value of current investments go to the income statement.",R:"Current investments are long-term holdings measured at depreciated cost.",a:2,exp:"A is true. R is false: current investments are easily sold and measured at FAIR value."}
+];
+
+// ordering / odd-one-out / fill-the-blank / multi-step calc: single-answer MCQ format (first option correct)
+const ADV = [
+ {t:4,sub:"Ordering",q:"Put the stages in the correct order, from start to finish:",o:[
+  ["Transactions and events → Bookkeeping → Accounting records → Rules of measurement and disclosure → Financial statements","Correct."],
+  ["Bookkeeping → Transactions and events → Accounting records → Financial statements → Rules of measurement and disclosure","Transactions come first, and the rules are applied BEFORE the statements."],
+  ["Transactions and events → Accounting records → Bookkeeping → Rules of measurement and disclosure → Financial statements","Bookkeeping creates the records, so it must come before them."],
+  ["Transactions and events → Bookkeeping → Rules of measurement and disclosure → Accounting records → Financial statements","The rules are applied to the records, not before them."]],
+  exp:"Record first (bookkeeping), then apply measurement and disclosure rules to produce the statements."},
+ {t:6,sub:"Ordering",q:"Put the working capital cycle in order, starting from cash:",o:[
+  ["Cash → Inventory → Receivables → Cash (then pay suppliers)","Correct."],
+  ["Cash → Receivables → Inventory → Cash","Goods must be bought before they can be sold on credit."],
+  ["Inventory → Payables → Receivables → Cash","Payables do not convert into receivables."],
+  ["Cash → Inventory → Cash → Receivables","Receivables come BEFORE cash collection."]],
+  exp:"Buy goods, sell on credit, collect cash, pay suppliers."},
+ {t:2,sub:"Ordering",q:"Put the steps for deciding a debit or credit in order:",o:[
+  ["Identify the element (A, L or OI) → Did it go up or down? → Pick the box → Debit or credit","Correct."],
+  ["Debit or credit → Identify the element → Up or down → Pick the box","You cannot decide debit/credit before knowing the element and direction."],
+  ["Up or down → Debit or credit → Identify the element → Pick the box","Element must be identified first."],
+  ["Pick the box → Identify the element → Debit or credit → Up or down","Direction must be known before choosing debit or credit."]],
+  exp:"The lecture's four steps: element, direction, box, debit/credit."},
+ {t:5,sub:"Ordering",q:"Rank these assets by their YEAR 2 depreciation charge, highest first. P: straight-line, cost £20,000, residual £2,000, life 6 years. Q: 25% reducing balance, cost £20,000. R: 15% straight-line on cost £22,000.",o:[
+  ["Q (£3,750) → R (£3,300) → P (£3,000)","Correct."],
+  ["Q (£5,000) → R (£3,300) → P (£3,000)","£5,000 is Q's YEAR 1 charge, not year 2."],
+  ["P (£3,333) → Q (£3,750) → R (£3,300)","P's charge uses (cost − residual): 18,000 ÷ 6 = 3,000, not 20,000 ÷ 6."],
+  ["R (£3,300) → P (£3,000) → Q (£2,813)","Q's year-2 charge is 25% × 15,000 = 3,750."]],
+  steps:["P: (20,000 − 2,000) ÷ 6 = £3,000 every year","Q: Y1 25% × 20,000 = 5,000 → NBV 15,000; Y2 25% × 15,000 = £3,750","R: 15% × 22,000 = £3,300 every year","Order: Q 3,750 > R 3,300 > P 3,000"],
+  exp:"Straight-line is constant; reducing balance falls each year from the opening NBV."},
+ {t:5,sub:"Ordering",q:"Put the steps for bad and doubtful debts in the correct order:",o:[
+  ["Write off known bad debts → Calculate the required provision on remaining receivables → Compare with the existing provision → Charge the change to P&L","Correct."],
+  ["Calculate the provision on all receivables → Write off bad debts → Charge the full provision to P&L → Compare","Write-offs come first, and only the CHANGE is charged."],
+  ["Compare with the existing provision → Write off bad debts → Calculate the provision → Charge the full provision","You cannot compare before calculating, and only the change is charged."],
+  ["Charge the change to P&L → Write off bad debts → Calculate the provision → Compare","The charge is the last step."]],
+  exp:"As in the Ahmed example: write off, provide on the remainder, then charge write-offs + increase."},
+ {t:3,sub:"Odd one out",q:"Which is the odd one out?",o:[
+  ["Accrual basis","Correct. It is an underlying assumption; the others are qualitative characteristics."],
+  ["Relevance","A qualitative characteristic."],
+  ["Comparability","A qualitative characteristic."],
+  ["Understandability","A qualitative characteristic."]],
+  exp:"Two underlying assumptions (accrual, going concern) vs four qualitative characteristics."},
+ {t:6,sub:"Odd one out",q:"Which is the odd one out?",o:[
+  ["Shop shelving","Correct. It is a non-current asset; the others are inventories."],
+  ["Raw materials","Inventory (current asset)."],
+  ["Work in progress","Inventory (current asset)."],
+  ["Finished goods","Inventory (current asset)."]],
+  exp:"Shelving is kept for continuing use (non-current)."},
+ {t:5,sub:"Odd one out",q:"Which is the odd one out?",o:[
+  ["Delivery van","Correct. It is tangible; the others are intangible non-current assets."],
+  ["Patent","Intangible."],
+  ["Trademark","Intangible."],
+  ["Goodwill","Intangible."]],
+  exp:"Intangible assets have no physical form."},
+ {t:4,sub:"Odd one out",q:"Which cash flow is the odd one out?",o:[
+  ["Proceeds from selling an old machine","Correct. Investing; the others are financing."],
+  ["Issuing new shares","Financing."],
+  ["Taking out a bank loan","Financing."],
+  ["Repaying a bank loan","Financing."]],
+  exp:"Selling a non-current asset is investing."},
+ {t:1,sub:"Odd one out",q:"Which is the odd one out?",o:[
+  ["Commission received","Correct. It is revenue; the others are contra items that reduce sales or purchases."],
+  ["Sales returns","Contra to sales."],
+  ["Purchase returns","Contra to purchases."],
+  ["Sales discounts","Contra to sales."]],
+  exp:"Contra items cancel part of a revenue or expense."},
+ {t:2,sub:"Odd one out",q:"Which account is the odd one out by its normal balance?",o:[
+  ["Drawings","Correct. A debit balance; the others are credit balances."],
+  ["Capital","Credit."],
+  ["Sales","Credit."],
+  ["Trade payables","Credit."]],
+  exp:"Drawings reduce ownership interest, so they are debits."},
+ {t:3,sub:"Fill the blank",q:"Information is ________ if omitting or misstating it could influence the decisions users make.",o:[
+  ["material","Correct."],
+  ["neutral","Neutral means free from bias."],
+  ["comparable","Comparable means it can be compared over time and with other businesses."],
+  ["timely","Timely means reported promptly."]],
+  exp:"Materiality is mainly about size, but nature also matters."},
+ {t:5,sub:"Fill the blank",q:"Net book value = Cost − ________.",o:[
+  ["accumulated depreciation","Correct."],
+  ["residual value","Cost − residual value is the total depreciable amount."],
+  ["this year's depreciation charge","NBV deducts ALL depreciation to date, not just this year's."],
+  ["revaluation reserve","The revaluation reserve is in equity."]],
+  exp:"NBV is also called depreciated cost."},
+ {t:4,sub:"Fill the blank",q:"The statement of financial position shows ________, whereas the income statement shows ________.",o:[
+  ["position on one date; performance over a period","Correct."],
+  ["performance over a period; position on one date","Reversed."],
+  ["adaptability; position on one date","Adaptability is the statement of cash flows."],
+  ["cash flows; profit on one date","Profit is measured over a period."]],
+  exp:"Snapshot vs period."},
+ {t:6,sub:"Fill the blank",q:"Working capital = ________.",o:[
+  ["current assets − current liabilities","Correct."],
+  ["total assets − total liabilities","That is net assets."],
+  ["current assets − total liabilities","Non-current liabilities are long-term funding."],
+  ["non-current assets − current liabilities","Working capital is about the short term."]],
+  exp:"Working capital is the short-term funding gap."},
+ {t:3,sub:"Fill the blank",q:"Present value = Future cash ________.",o:[
+  ["÷ (1 + r)ⁿ","Correct."],
+  ["× (1 − r)ⁿ","That is taking r% off repeatedly, not discounting."],
+  ["× (1 + r)ⁿ","That compounds forward, giving a FUTURE value."],
+  ["− (r × n)","Discounting is not a simple subtraction."]],
+  exp:"Money later is worth less than money now, so divide by (1 + r)ⁿ."},
+ {t:2,sub:"Fill the blank",q:"An expense ________ ownership interest and is recorded as a ________.",o:[
+  ["decreases; debit","Correct."],
+  ["increases; credit","That describes revenue."],
+  ["decreases; credit","Decreases in ownership interest are debits."],
+  ["does not affect; debit","Expenses reduce ownership interest via profit."]],
+  exp:"Expenses and drawings are debits; revenue and capital introduced are credits."},
+ {t:5,sub:"Multi-step calculation",q:"An asset bought on 1 January 2024 for £40,000 is depreciated at 25% reducing balance. What is its NBV at 31 December 2026?",o:[
+  ["£16,875","Correct."],
+  ["£10,000","You used straight-line 25% of cost (3 × 10,000)."],
+  ["£22,500","That is NBV after only TWO years."],
+  ["£5,625","That is the 2026 depreciation charge, not NBV."]],
+  steps:["2024: 25% × 40,000 = 10,000 → NBV 30,000","2025: 25% × 30,000 = 7,500 → NBV 22,500","2026: 25% × 22,500 = 5,625 → NBV £16,875","Shortcut: 40,000 × 0.75³ = 16,875"],
+  exp:"Three years (2024, 2025, 2026), each on the opening NBV."},
+ {t:5,sub:"Multi-step calculation",q:"Equipment cost £55,000 (accumulated depreciation £16,500) is depreciated at 10% straight-line on cost. Vehicles cost £72,000 (accumulated depreciation £25,920) at 20% reducing balance. What is the total depreciation charge for the year?",o:[
+  ["£14,716","Correct."],
+  ["£19,900","You charged vehicles on cost (20% × 72,000) instead of NBV."],
+  ["£13,066","You charged equipment on NBV, but it is straight-line on COST."],
+  ["£9,216","That is the vehicles charge only."]],
+  steps:["Equipment: 10% × 55,000 = £5,500","Vehicles NBV = 72,000 − 25,920 = £46,080","Vehicles: 20% × 46,080 = £9,216","Total = 5,500 + 9,216 = £14,716"],
+  exp:"Read each method carefully: straight-line uses cost, reducing balance uses NBV."},
+ {t:5,sub:"Multi-step calculation",q:"Draft profit is £48,000. Not yet adjusted: accrued electricity £650; insurance of £1,200 paid for next year was included in expenses; the provision for doubtful debts must rise by £900; depreciation of £4,300 has not been recorded. What is the adjusted profit?",o:[
+  ["£43,350","Correct."],
+  ["£40,950","You DEDUCTED the prepayment. Removing a prepayment from expenses INCREASES profit."],
+  ["£44,650","You ADDED the accrual. An accrual increases expenses, reducing profit."],
+  ["£47,650","You ignored depreciation because it is non-cash. It is still an expense."]],
+  steps:["Start: 48,000","Accrual: − 650 → 47,350","Prepayment taken out of expenses: + 1,200 → 48,550","Provision increase: − 900 → 47,650","Depreciation: − 4,300 → £43,350"],
+  exp:"Accruals and depreciation and provision increases reduce profit; prepayments (removing expense) increase it."},
+ {t:3,sub:"Multi-step calculation",q:"An asset will produce £5,500 in one year and £6,050 in two years. At a 10% discount rate, what is its total present value?",o:[
+  ["£10,000","Correct. 5,000 + 5,000."],
+  ["£11,550","That is the undiscounted total."],
+  ["£10,500","You discounted the second amount for only one year."],
+  ["£9,240","You took 20% off the total instead of discounting each flow."]],
+  steps:["Year 1: 5,500 ÷ 1.10 = £5,000","Year 2: 6,050 ÷ 1.21 = £5,000","Total PV = £10,000"],
+  exp:"Discount each cash flow by its own number of years, then add."},
+ {t:5,sub:"Multi-step calculation",q:"Receivables before write-offs are £126,800. Bad debts of £3,800 are written off. The provision should be 6% of the remaining receivables; the existing provision is £8,100. What is the total P&L charge for bad and doubtful debts?",o:[
+  ["£3,080","Correct. 3,800 − 720 decrease in provision."],
+  ["£4,520","You treated the DECREASE in provision as an increase."],
+  ["£11,180","You charged the whole new provision."],
+  ["£3,800","You ignored the change in provision."]],
+  steps:["Remaining = 126,800 − 3,800 = £123,000","New provision = 6% × 123,000 = £7,380","Change = 7,380 − 8,100 = −£720 (decrease)","Charge = 3,800 − 720 = £3,080"],
+  exp:"A fall in the provision is released, reducing the total charge."},
+ {t:1,sub:"Multi-step calculation",q:"Net assets were £64,000 at the start of the year and £71,500 at the end. Drawings were £18,200 and the owner introduced £10,000 during the year. What was the profit?",o:[
+  ["£15,700","Correct."],
+  ["£7,500","That is only the change in net assets."],
+  ["£35,700","You added the capital introduced instead of deducting it."],
+  ["−£20,700 (a loss)","You deducted drawings instead of adding them back."]],
+  steps:["Change in net assets = 71,500 − 64,000 = 7,500","Profit = change + drawings − capital introduced","= 7,500 + 18,200 − 10,000 = £15,700"],
+  exp:"Strip out the owner's transactions: add back what was withdrawn, remove what was put in."},
+ {t:6,sub:"Multi-step calculation",q:"Non-current assets (NBV) £318,250; current assets £96,430; current liabilities £41,870; non-current liabilities £75,000. What are net assets?",o:[
+  ["£297,810","Correct."],
+  ["£372,810","That is total assets less current liabilities; you forgot the non-current liabilities."],
+  ["£414,680","That is total assets."],
+  ["£222,810","You deducted the non-current liabilities twice."]],
+  steps:["Total assets = 318,250 + 96,430 = £414,680","Less CL: 414,680 − 41,870 = £372,810","Less NCL: 372,810 − 75,000 = £297,810"],
+  exp:"Net assets = capital (ownership interest)."},
+ {t:5,sub:"Multi-step calculation",q:"The year end is 31 December 2026. An insurance policy of £2,160 was paid on 1 October 2025 for 12 months; the renewal of £2,400 was paid on 1 October 2026 for 12 months. What is the insurance EXPENSE for 2026?",o:[
+  ["£2,220","Correct."],
+  ["£2,400","That is just the cash paid in 2026 (cash basis)."],
+  ["£4,560","You added both payments in full."],
+  ["£600","You only included the new policy's 3 months."]],
+  steps:["Old policy Jan–Sep 2026: 9/12 × 2,160 = £1,620","New policy Oct–Dec 2026: 3/12 × 2,400 = £600","Expense = 1,620 + 600 = £2,220","(Prepayment at 31 Dec 2026 = 9/12 × 2,400 = £1,800)"],
+  exp:"Expense = what was USED in the period, from each policy, regardless of when it was paid."}
+];
+
+/* ================= ENGINE ================= */
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const LETTERS = "ABCDEFGHIJ";
+const STORE_KEY = "fim4002_study_v1";
+
+function loadStore(){ try { return JSON.parse(localStorage.getItem(STORE_KEY)) || {best:{}, topic:{}, history:[]}; } catch(e){ return {best:{}, topic:{}, history:[]}; } }
+function saveStore(s){ try { localStorage.setItem(STORE_KEY, JSON.stringify(s)); } catch(e){} }
+
+const SECTIONS = {
+  tf:    {name:"True / False", icon:"⚖️", desc:"Near-miss statements and misconception traps. Decide if each is exactly right.", per:60},
+  match: {name:"Matching", icon:"🔗", desc:"Match terms, items and figures using the dropdowns. Every row must be right to score.", per:180},
+  mcq:   {name:"Standard MCQ", icon:"🎯", desc:"Single-answer questions with calculator-style numbers and trap distractors.", per:120},
+  adv:   {name:"Advanced MCQ", icon:"🧠", desc:"Select-all-that-apply, assertion–reason, ordering, odd-one-out, fill-the-blank and multi-step calculations.", per:150},
+  mixed: {name:"Mixed", icon:"🔀", desc:"A random blend of every question type from every section.", per:120},
+  exam:  {name:"Exam simulation", icon:"⏱️", desc:"15 single-answer MCQs, 30 minutes, auto-submits at zero. Mirrors the real in-class test.", per:120}
+};
+
+// --- build pools of normalised question objects ---
+function arTruth(a){ return [[1,1,1],[1,1,0],[1,0,0],[0,1,0],[0,0,0]][a]; }
+function build(){
+  const P = {tf:[], match:[], mcq:[], adv:[]};
+  TF.forEach((x,i)=>P.tf.push({uid:"tf"+i, kind:"tf", t:x.t, sub:"True / False", q:x.q, a:x.a, exp:x.exp, trap:x.trap}));
+  MATCH.forEach((x,i)=>P.match.push({uid:"m"+i, kind:"match", t:x.t, sub:"Matching", q:x.q, pairs:x.pairs, extra:x.extra||[], exp:x.exp}));
+  MCQ.forEach((x,i)=>P.mcq.push({uid:"q"+i, kind:"single", t:x.t, sub:x.sub||"Multiple choice", q:x.q, o:x.o, fixed:false, steps:x.steps, exp:x.exp}));
+  MULTI.forEach((x,i)=>P.adv.push({uid:"ms"+i, kind:"multi", t:x.t, sub:"Select all that apply", q:x.q, o:x.o, exp:x.exp}));
+  AR.forEach((x,i)=>{
+    const tr = arTruth(x.a);
+    const desc = (tr[0]?"A is TRUE":"A is FALSE") + ", " + (tr[1]?"R is TRUE":"R is FALSE") + (tr[0]&&tr[1] ? (tr[2]?", and R explains A.":", but R does not explain A.") : ".");
+    const o = AR_OPTS.map((txt,k)=>{
+      if (k===x.a) return [txt,"Correct. "+desc];
+      const w = arTruth(k);
+      let why = "This option claims " + (w[0]?"A is true":"A is false") + " and " + (w[1]?"R is true":"R is false") + (w[0]&&w[1]?(w[2]?" with R explaining A":" with R not explaining A"):"") + ". Actually: " + desc;
+      return [txt, why];
+    });
+    // reorder so the correct one is first (engine convention) but keep display order fixed
+    P.adv.push({uid:"ar"+i, kind:"single", t:x.t, sub:"Assertion–reason", ar:{A:x.A,R:x.R}, q:"Assertion (A): "+x.A+"  Reason (R): "+x.R, o:o, correctIdx:x.a, fixed:true, exp:x.exp});
+  });
+  ADV.forEach((x,i)=>P.adv.push({uid:"ad"+i, kind:"single", t:x.t, sub:x.sub, q:x.q, o:x.o, fixed:false, steps:x.steps, exp:x.exp}));
+  return P;
+}
+const POOLS = build();
+const ALL = [].concat(POOLS.tf, POOLS.match, POOLS.mcq, POOLS.adv);
+const SINGLE_POOL = [].concat(POOLS.mcq, POOLS.adv.filter(q=>q.kind==="single"));
+
+// prepare an instance (shuffle options) for a session
+function prep(q){
+  const p = Object.assign({}, q);
+  if (q.kind === "single"){
+    let opts = q.o.map((x,k)=>({text:x[0], why:x[1], correct: q.fixed ? k===q.correctIdx : k===0}));
+    p.opts = q.fixed ? opts : shuffle(opts);
+  } else if (q.kind === "multi"){
+    p.opts = shuffle(q.o.map(x=>({text:x[0], correct:x[1], why:x[2]})));
+  } else if (q.kind === "tf"){
+    p.opts = [{text:"True", correct:q.a===true}, {text:"False", correct:q.a===false}];
+  } else if (q.kind === "match"){
+    p.rows = shuffle(q.pairs.map(x=>({left:x[0], answer:x[1]})));
+    const set = Array.from(new Set(q.pairs.map(x=>x[1]).concat(q.extra||[])));
+    p.choices = shuffle(set);
+  }
+  return p;
+}
+
+// stratified pick: at least `minPer` per selected topic where possible
+function pick(pool, n, topics, minPer){
+  pool = pool.filter(q=>topics.includes(q.t));
+  if (n >= pool.length) return shuffle(pool);
+  const chosen = [], used = new Set();
+  if (minPer){
+    topics.forEach(t=>{
+      shuffle(pool.filter(q=>q.t===t)).slice(0,minPer).forEach(q=>{ if (chosen.length<n){chosen.push(q); used.add(q.uid);} });
+    });
+  }
+  shuffle(pool.filter(q=>!used.has(q.uid))).forEach(q=>{ if (chosen.length<n) chosen.push(q); });
+  return shuffle(chosen);
+}
+
+/* ================= STATE ================= */
+let S = null; // current session
+let timerHandle = null;
+
+function show(id){
+  document.querySelectorAll(".view").forEach(v=>v.classList.add("hidden"));
+  $("#"+id).classList.remove("hidden");
+  window.scrollTo(0,0);
+}
+
+/* ================= HOME ================= */
+function renderHome(){
+  stopTimer();
+  const st = loadStore();
+  const counts = {tf:POOLS.tf.length, match:POOLS.match.length, mcq:POOLS.mcq.length, adv:POOLS.adv.length, mixed:ALL.length, exam:SINGLE_POOL.length};
+  const days = Math.ceil((new Date("2026-11-25T09:00:00") - new Date())/86400000);
+  let html = `<div class="hero"><div><h1>Financial Accounting <span>FIM4002</span></h1>
+    <p>SOAS · BSc Year 1 · In-class test (30%) · 15 MCQs · 30 minutes · closed book · bring a non-programmable calculator.</p>
+    <p class="small">Covers Topics 1–6. Test dates: Wed 25 Nov 2026 / Fri 27 Nov 2026 (your own seminar slot).${days>0?` <b>${days} day${days===1?"":"s"} to go.</b>`:""}</p></div>
+    <button class="btn primary big" onclick="openSetup('exam')">⏱️ Start exam simulation</button></div>`;
+  html += `<h2>Practice sections</h2><div class="grid">`;
+  ["tf","match","mcq","adv","mixed","exam"].forEach(k=>{
+    const b = st.best[k];
+    html += `<div class="card sec" onclick="openSetup('${k}')" tabindex="0" onkeydown="if(event.key==='Enter')openSetup('${k}')">
+      <div class="sec-ico">${SECTIONS[k].icon}</div><h3>${SECTIONS[k].name}</h3><p>${SECTIONS[k].desc}</p>
+      <div class="sec-foot"><span class="pill">${counts[k]} ${k==="match"?"sets":"questions"}</span>${b?`<span class="pill gold">Best ${b.best}% · ${b.attempts} attempt${b.attempts>1?"s":""}</span>`:`<span class="pill muted">Not attempted</span>`}</div></div>`;
+  });
+  html += `<div class="card sec" onclick="renderLearn()" tabindex="0"><div class="sec-ico">📘</div><h3>Learn: revision notes</h3><p>Key concepts and every formula you need, topic by topic, from the module flashcards.</p><div class="sec-foot"><span class="pill">6 topics</span></div></div>`;
+  html += `</div>`;
+  // topic mastery
+  html += `<h2>Your topic mastery <span class="small">(all attempts, saved on this device)</span></h2><div class="card">`;
+  Object.keys(TOPICS).forEach(t=>{
+    const d = st.topic[t]; const pct = d && d.n ? Math.round(100*d.c/d.n) : null;
+    html += `<div class="bar-row"><div class="bar-lbl">T${t} · ${TOPICS[t]}</div><div class="bar"><div class="fill ${pct===null?"":pct>=70?"ok":pct>=50?"mid":"bad"}" style="width:${pct||0}%"></div></div><div class="bar-val">${pct===null?"–":pct+"%"}</div></div>`;
+  });
+  html += `<div class="row-end"><button class="btn ghost small" onclick="resetStats()">Reset saved scores</button></div></div>`;
+  if (st.history.length){
+    html += `<h2>Recent attempts</h2><div class="card"><table class="tbl"><tr><th>When</th><th>Section</th><th>Score</th></tr>`;
+    st.history.slice(-8).reverse().forEach(h=>{ html += `<tr><td>${esc(h.when)}</td><td>${esc(SECTIONS[h.sec]?SECTIONS[h.sec].name:h.sec)}</td><td>${h.c}/${h.n} (${h.pct}%)</td></tr>`; });
+    html += `</table></div>`;
+  }
+  $("#home").innerHTML = html;
+  show("home");
+}
+function resetStats(){ if (confirm("Delete all saved best scores and topic stats on this device?")){ localStorage.removeItem(STORE_KEY); renderHome(); } }
+
+/* ================= LEARN ================= */
+function renderLearn(focus){
+  stopTimer();
+  let html = `<div class="topbar"><button class="btn ghost" onclick="renderHome()">← Home</button><h2>Learn: revision notes</h2></div>
+  <div class="tabs">${Object.keys(TOPICS).map(t=>`<a href="#learn-${t}" class="tab">T${t}</a>`).join("")}</div>`;
+  Object.keys(TOPICS).forEach(t=>{
+    const L = LEARN[t];
+    html += `<div class="card learn" id="learn-${t}"><h3>Topic ${t}: ${TOPICS[t]}</h3><p class="muted">${L.summary}</p>
+      <ul>${L.points.map(p=>`<li>${p}</li>`).join("")}</ul>
+      <div class="formula"><b>Formulas</b>${L.formulas.map(f=>`<div>${esc(f)}</div>`).join("")}</div>
+      <div class="row-end"><button class="btn small" onclick="quickTopic(${t})">Practise Topic ${t} (10 mixed questions)</button></div></div>`;
+  });
+  $("#learn").innerHTML = html; show("learn");
+  if (focus){ const el = document.getElementById("learn-"+focus); if (el) el.scrollIntoView(); }
+}
+function quickTopic(t){ startSession("mixed", [t], 10, true, false); }
+
+/* ================= SETUP ================= */
+function openSetup(sec){
+  stopTimer();
+  const isExam = sec === "exam";
+  const poolSize = {tf:POOLS.tf.length, match:POOLS.match.length, mcq:POOLS.mcq.length, adv:POOLS.adv.length, mixed:ALL.length}[sec];
+  let html = `<div class="topbar"><button class="btn ghost" onclick="renderHome()">← Home</button><h2>${SECTIONS[sec].icon} ${SECTIONS[sec].name}</h2></div><div class="card">
+  <p>${SECTIONS[sec].desc}</p>`;
+  if (isExam){
+    html += `<ul class="rules"><li>15 single-answer multiple-choice questions drawn at random from ${SINGLE_POOL.length}, at least 2 from every topic.</li>
+      <li>30:00 countdown, always visible. The test <b>auto-submits at 0:00</b>.</li>
+      <li>You can move between questions and flag them for review before submitting.</li>
+      <li>No explanations until you submit, just like the real thing. Use paper and a calculator.</li></ul>
+      <label class="chk"><input type="checkbox" id="extra"> Study Inclusion Plan: +25% extra time (37:30)</label>`;
+  } else {
+    html += `<div class="field"><b>Topics</b><div class="chips">${Object.keys(TOPICS).map(t=>`<label class="chip"><input type="checkbox" class="tp" value="${t}" checked> T${t} ${TOPICS[t]}</label>`).join("")}</div></div>
+    <div class="field"><b>Number of ${sec==="match"?"sets":"questions"}</b><div class="chips">${(sec==="match"?[5,8,12,"All"]:[10,15,20,30,"All"]).map((n,i)=>`<label class="chip"><input type="radio" name="num" value="${n}" ${i===(sec==="match"?0:1)?"checked":""}> ${n==="All"?"All ("+poolSize+")":n}</label>`).join("")}</div></div>
+    <label class="chk"><input type="checkbox" id="timed" checked> Timed (≈${Math.round(SECTIONS[sec].per/60*10)/10} min per ${sec==="match"?"set":"question"}, auto-submit at zero)</label>`;
+  }
+  html += `<div class="row-end"><button class="btn primary big" onclick="beginFromSetup('${sec}')">Start</button></div></div>`;
+  $("#setup").innerHTML = html; show("setup");
+}
+function beginFromSetup(sec){
+  if (sec === "exam"){ startSession("exam", [1,2,3,4,5,6], 15, true, $("#extra").checked); return; }
+  const topics = Array.from(document.querySelectorAll(".tp:checked")).map(x=>+x.value);
+  if (!topics.length){ alert("Pick at least one topic."); return; }
+  const nv = document.querySelector("input[name=num]:checked").value;
+  startSession(sec, topics, nv==="All"?9999:+nv, $("#timed").checked, false);
+}
+
+/* ================= SESSION ================= */
+function startSession(sec, topics, n, timed, extra, fixedList){
+  let qs;
+  if (fixedList) qs = fixedList;
+  else if (sec === "exam") qs = pick(SINGLE_POOL, 15, topics, 2);
+  else if (sec === "mixed") qs = pick(ALL, n, topics, topics.length>1?1:0);
+  else qs = pick(POOLS[sec], n, topics, 0);
+  if (!qs.length){ alert("No questions for that selection."); return; }
+  qs = qs.map(prep);
+  let secs = 0;
+  if (sec === "exam") secs = extra ? 37.5*60 : 30*60;
+  else if (timed) secs = qs.reduce((s,q)=>s + (q.kind==="match"?180:q.kind==="tf"?60:SECTIONS[sec==="mixed"?"mcq":sec].per), 0);
+  S = {sec, topics, qs, ans:{}, flag:{}, i:0, timed: sec==="exam"||timed, total:secs, left:secs, started:Date.now(), extra, submitted:false};
+  renderQuiz();
+  if (S.timed) startTimer();
+}
+
+function startTimer(){
+  stopTimer();
+  const end = Date.now() + S.left*1000;
+  timerHandle = setInterval(()=>{
+    S.left = Math.max(0, Math.round((end - Date.now())/1000));
+    updateTimer();
+    if (S.left <= 0){ stopTimer(); submit(true); }
+  }, 250);
+  updateTimer();
+}
+function stopTimer(){ if (timerHandle){ clearInterval(timerHandle); timerHandle = null; } }
+function fmt(s){ const m = Math.floor(s/60), r = s%60; return m+":"+String(r).padStart(2,"0"); }
+function updateTimer(){
+  const el = $("#timer"); if (!el || !S) return;
+  el.textContent = "⏱ " + fmt(S.left);
+  el.classList.toggle("warn", S.left <= 300 && S.left > 60);
+  el.classList.toggle("crit", S.left <= 60);
+  const bar = $("#tbar"); if (bar) bar.style.width = (100*S.left/S.total)+"%";
+}
+
+function answered(q){
+  const a = S.ans[q.uid];
+  if (a === undefined || a === null) return false;
+  if (q.kind === "multi") return a.length > 0;
+  if (q.kind === "match") return Object.values(a).some(v=>v);
+  return true;
+}
+
+function renderQuiz(){
+  const q = S.qs[S.i];
+  const nAns = S.qs.filter(answered).length;
+  let html = `<div class="quiz-head"><div class="qh-left"><button class="btn ghost small" onclick="quitQuiz()">✕ Quit</button><span class="qh-title">${SECTIONS[S.sec].name}</span></div>
+    ${S.timed?`<div id="timer" class="timer">⏱ ${fmt(S.left)}</div>`:`<div class="timer off">Untimed</div>`}</div>
+    ${S.timed?`<div class="tbar"><div id="tbar"></div></div>`:""}
+    <div class="nav">${S.qs.map((x,k)=>`<button class="nb ${k===S.i?"cur":""} ${answered(x)?"done":""} ${S.flag[x.uid]?"flag":""}" onclick="go(${k})" aria-label="Question ${k+1}">${k+1}</button>`).join("")}</div>
+    <div class="card qcard">
+      <div class="qmeta"><span class="pill">Q${S.i+1} of ${S.qs.length}</span><span class="pill muted">T${q.t} · ${TOPICS[q.t]}</span><span class="pill gold">${esc(q.sub)}</span></div>`;
+  html += renderQuestionBody(q);
+  html += `</div><div class="qfoot">
+      <button class="btn" onclick="go(${S.i-1})" ${S.i===0?"disabled":""}>← Prev</button>
+      <button class="btn ghost" onclick="toggleFlag()">${S.flag[q.uid]?"⚑ Unflag":"⚐ Flag"}</button>
+      ${S.i<S.qs.length-1?`<button class="btn primary" onclick="go(${S.i+1})">Next →</button>`:`<button class="btn primary" onclick="confirmSubmit()">Submit</button>`}
+    </div>
+    <div class="row-end"><span class="small">${nAns}/${S.qs.length} answered</span> <button class="btn danger" id="submitBtn" onclick="confirmSubmit()">Submit ${S.sec==="exam"?"test":"answers"}</button></div>`;
+  $("#quiz").innerHTML = html; show("quiz"); updateTimer();
+}
+
+function renderQuestionBody(q){
+  const a = S.ans[q.uid];
+  let h = "";
+  if (q.ar){
+    h += `<div class="qtext">Read the assertion and the reason, then choose the correct option.</div>
+      <div class="ar"><div><b>Assertion (A):</b> ${esc(q.ar.A)}</div><div><b>Reason (R):</b> ${esc(q.ar.R)}</div></div>`;
+  } else h += `<div class="qtext">${esc(q.q)}</div>`;
+  if (q.kind === "single" || q.kind === "tf"){
+    h += `<div class="opts">` + q.opts.map((o,k)=>`<label class="opt ${a===k?"sel":""}"><input type="radio" name="o" ${a===k?"checked":""} onchange="setAns(${k})"><span class="let">${q.kind==="tf"?(k===0?"T":"F"):LETTERS[k]}</span><span>${esc(o.text)}</span></label>`).join("") + `</div>`;
+  } else if (q.kind === "multi"){
+    const arr = a || [];
+    h += `<div class="hint">Select every correct option. You score only if your selection is exactly right.</div><div class="opts">` + q.opts.map((o,k)=>`<label class="opt ${arr.includes(k)?"sel":""}"><input type="checkbox" ${arr.includes(k)?"checked":""} onchange="toggleMulti(${k})"><span class="let">${LETTERS[k]}</span><span>${esc(o.text)}</span></label>`).join("") + `</div>`;
+  } else if (q.kind === "match"){
+    const m = a || {};
+    h += `<div class="hint">Choose a match for every row. Options can be used more than once, and some are not used at all.</div><div class="match">` + q.rows.map((r,k)=>`<div class="mrow"><div class="mleft">${esc(r.left)}</div><select onchange="setMatch(${k}, this.value)"><option value="">— choose —</option>${q.choices.map(c=>`<option ${m[k]===c?"selected":""}>${esc(c)}</option>`).join("")}</select></div>`).join("") + `</div>`;
+  }
+  return h;
+}
+function cur(){ return S.qs[S.i]; }
+function setAns(k){ S.ans[cur().uid] = k; renderQuiz(); }
+function toggleMulti(k){ const q = cur(); const arr = (S.ans[q.uid]||[]).slice(); const i = arr.indexOf(k); if (i>=0) arr.splice(i,1); else arr.push(k); S.ans[q.uid] = arr; renderQuiz(); }
+function setMatch(k, v){ const q = cur(); const m = Object.assign({}, S.ans[q.uid]||{}); m[k] = v; S.ans[q.uid] = m; refreshNav(); }
+function refreshNav(){ document.querySelectorAll(".nb").forEach((b,k)=>b.classList.toggle("done", answered(S.qs[k]))); }
+function toggleFlag(){ const q = cur(); S.flag[q.uid] = !S.flag[q.uid]; renderQuiz(); }
+function go(k){ if (k<0 || k>=S.qs.length) return; S.i = k; renderQuiz(); }
+function quitQuiz(){ if (confirm("Quit this attempt? Your answers will not be marked.")){ stopTimer(); S=null; renderHome(); } }
+function confirmSubmit(){
+  const un = S.qs.filter(q=>!answered(q)).length, fl = Object.values(S.flag).filter(Boolean).length;
+  let msg = "Submit now?";
+  if (un) msg = `You have ${un} unanswered question${un>1?"s":""}` + (fl?` and ${fl} flagged`:"") + ". Submit anyway?";
+  else if (fl) msg = `You have ${fl} flagged question${fl>1?"s":""}. Submit anyway?`;
+  if (confirm(msg)) submit(false);
+}
+
+/* ================= MARKING ================= */
+function mark(q){
+  const a = S.ans[q.uid];
+  if (q.kind === "single" || q.kind === "tf") return a !== undefined && q.opts[a] && q.opts[a].correct;
+  if (q.kind === "multi"){ const arr = a||[]; return q.opts.every((o,k)=>o.correct === arr.includes(k)); }
+  if (q.kind === "match"){ const m = a||{}; return q.rows.every((r,k)=>m[k]===r.answer); }
+  return false;
+}
+
+function submit(auto){
+  if (!S || S.submitted) return;
+  S.submitted = true; stopTimer();
+  S.used = S.total ? S.total - S.left : Math.round((Date.now()-S.started)/1000);
+  S.auto = auto;
+  S.res = S.qs.map(q=>({q, ok: mark(q)}));
+  const c = S.res.filter(r=>r.ok).length, n = S.res.length, pct = Math.round(100*c/n);
+  // save stats
+  const st = loadStore();
+  const b = st.best[S.sec] || {best:0, attempts:0};
+  b.attempts++; b.best = Math.max(b.best, pct); b.last = pct; st.best[S.sec] = b;
+  S.res.forEach(r=>{ const d = st.topic[r.q.t] || {c:0,n:0}; d.n++; if (r.ok) d.c++; st.topic[r.q.t] = d; });
+  const now = new Date();
+  st.history.push({when: now.toLocaleDateString("en-GB")+" "+now.toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"}), sec:S.sec, c, n, pct});
+  if (st.history.length > 50) st.history = st.history.slice(-50);
+  saveStore(st);
+  S.score = {c, n, pct, newBest: pct >= b.best && b.attempts>1 ? pct===b.best : false};
+  renderResults("all");
+}
+
+function answerText(q){
+  const a = S.ans[q.uid];
+  if (q.kind === "single" || q.kind === "tf") return a === undefined ? "<i>No answer</i>" : `${q.kind==="tf"?"":LETTERS[a]+". "}${esc(q.opts[a].text)}`;
+  if (q.kind === "multi"){ const arr = (a||[]).slice().sort(); return arr.length ? arr.map(k=>LETTERS[k]+". "+esc(q.opts[k].text)).join("<br>") : "<i>No answer</i>"; }
+  return "";
+}
+function correctText(q){
+  if (q.kind === "single" || q.kind === "tf"){ const k = q.opts.findIndex(o=>o.correct); return `${q.kind==="tf"?"":LETTERS[k]+". "}${esc(q.opts[k].text)}`; }
+  if (q.kind === "multi") return q.opts.map((o,k)=>o.correct?LETTERS[k]+". "+esc(o.text):null).filter(Boolean).join("<br>");
+  return "";
+}
+
+function renderResults(filter){
+  const {c, n, pct} = S.score;
+  const grade = pct>=70?"ok":pct>=50?"mid":"bad";
+  const msg = pct>=85?"Excellent: exam-ready on this material.":pct>=70?"Good. Tighten up the weak topics below.":pct>=50?"Borderline. Work through the explanations and the topic lessons below.":"Needs work. Read every explanation, then use the Learn notes for your weak topics.";
+  let html = `<div class="topbar"><button class="btn ghost" onclick="renderHome()">← Home</button><h2>Results: ${SECTIONS[S.sec].name}</h2></div>
+  <div class="card score ${grade}"><div class="big-score">${c}/${n}<span>${pct}%</span></div><div><p><b>${msg}</b></p>
+    <p class="small">${S.auto?"⏰ Time ran out, so the test was auto-submitted. ":""}Time used: ${fmt(S.used)}${S.total?` of ${fmt(S.total)}`:""}${S.sec==="exam"&&S.extra?" (extra time)":""}.</p>
+    ${S.sec==="exam"?`<p class="small">In the real test each question is worth 2% of your module grade, so this would be about <b>${(c*2)}%</b> of the 30%.</p>`:""}</div></div>`;
+  // by topic
+  const by = {};
+  S.res.forEach(r=>{ const d = by[r.q.t] || (by[r.q.t] = {c:0,n:0}); d.n++; if (r.ok) d.c++; });
+  html += `<h2>Score by topic</h2><div class="card">`;
+  Object.keys(by).sort().forEach(t=>{ const d = by[t], p = Math.round(100*d.c/d.n);
+    html += `<div class="bar-row"><div class="bar-lbl">T${t} · ${TOPICS[t]}</div><div class="bar"><div class="fill ${p>=70?"ok":p>=50?"mid":"bad"}" style="width:${p}%"></div></div><div class="bar-val">${d.c}/${d.n}</div></div>`; });
+  html += `</div>`;
+  // weak topics mini lessons
+  const weak = Object.keys(by).filter(t=>by[t].c/by[t].n < 0.7);
+  if (weak.length){
+    html += `<h2>Review these topics</h2>`;
+    weak.forEach(t=>{
+      const L = LEARN[t];
+      const missed = S.res.filter(r=>!r.ok && r.q.t==t).map(r=>r.q.sub);
+      html += `<div class="card lesson"><h3>📌 Topic ${t}: ${TOPICS[t]} <span class="pill bad">${by[t].c}/${by[t].n}</span></h3>
+        <p class="small">You missed: ${esc(Array.from(new Set(missed)).join(", "))}</p>
+        <b>Key points to fix</b><ul>${L.points.map(p=>`<li>${p}</li>`).join("")}</ul>
+        <div class="formula"><b>Formulas</b>${L.formulas.map(f=>`<div>${esc(f)}</div>`).join("")}</div>
+        <div class="row-end"><button class="btn small" onclick="quickTopic(${t})">Drill Topic ${t} now</button></div></div>`;
+    });
+  } else html += `<div class="card ok-note">✅ No weak topics in this attempt (every topic was at least 70%).</div>`;
+  // actions
+  const wrong = S.res.filter(r=>!r.ok).map(r=>POOLS_LOOKUP[r.q.uid]);
+  html += `<div class="actions">${wrong.length?`<button class="btn primary" onclick="retryWrong()">↻ Retry the ${wrong.length} I got wrong</button>`:""}
+    <button class="btn" onclick="${S.sec==="exam"?"openSetup('exam')":`openSetup('${S.sec}')`}">New attempt</button>
+    <button class="btn ghost" onclick="renderLearn()">📘 Learn notes</button></div>`;
+  // review
+  html += `<h2>Answer review</h2><div class="tabs"><button class="tab ${filter==="all"?"on":""}" onclick="renderResults('all')">All (${n})</button><button class="tab ${filter==="wrong"?"on":""}" onclick="renderResults('wrong')">Wrong (${n-c})</button><button class="tab ${filter==="right"?"on":""}" onclick="renderResults('right')">Right (${c})</button></div>`;
+  S.res.forEach((r,k)=>{
+    if (filter==="wrong" && r.ok) return; if (filter==="right" && !r.ok) return;
+    html += reviewCard(r, k);
+  });
+  $("#results").innerHTML = html; show("results");
+}
+
+function reviewCard(r, k){
+  const q = r.q, a = S.ans[q.uid];
+  let h = `<div class="card rev ${r.ok?"r-ok":"r-bad"}"><div class="qmeta"><span class="pill ${r.ok?"okp":"bad"}">${r.ok?"✔ Correct":"✘ "+(answered(q)?"Wrong":"Not answered")}</span><span class="pill">Q${k+1}</span><span class="pill muted">T${q.t} · ${TOPICS[q.t]}</span><span class="pill gold">${esc(q.sub)}</span></div>`;
+  if (q.ar) h += `<div class="ar"><div><b>A:</b> ${esc(q.ar.A)}</div><div><b>R:</b> ${esc(q.ar.R)}</div></div>`;
+  else h += `<div class="qtext">${esc(q.q)}</div>`;
+  if (q.kind === "single" || q.kind === "tf"){
+    h += `<div class="ans"><div><b>Your answer:</b> ${answerText(q)}</div><div><b>Correct answer:</b> ${correctText(q)}</div></div>`;
+    if (q.kind === "single"){
+      h += `<div class="why-list">` + q.opts.map((o,j)=>`<div class="why ${o.correct?"w-ok":""} ${a===j&&!o.correct?"w-bad":""}"><span class="let">${LETTERS[j]}</span><div><b>${esc(o.text)}</b>${a===j?' <span class="pill tiny">your choice</span>':""}<div class="small">${esc(o.why)}</div></div></div>`).join("") + `</div>`;
+    } else if (!r.ok && q.trap){ h += `<div class="trap">⚠️ ${esc(q.trap)}</div>`; }
+  } else if (q.kind === "multi"){
+    const arr = a || [];
+    h += `<div class="why-list">` + q.opts.map((o,j)=>{ const picked = arr.includes(j); const right = o.correct===picked;
+      return `<div class="why ${o.correct?"w-ok":""} ${!right?"w-bad":""}"><span class="let">${o.correct?"✔":"✘"}</span><div><b>${esc(o.text)}</b> ${picked?'<span class="pill tiny">you selected</span>':""} ${!right?(o.correct?'<span class="pill tiny bad">missed</span>':'<span class="pill tiny bad">should NOT be selected</span>'):""}<div class="small">${esc(o.why)}</div></div></div>`; }).join("") + `</div>`;
+  } else if (q.kind === "match"){
+    const m = a || {}; let good = 0;
+    h += `<table class="tbl mt"><tr><th>Item</th><th>Your match</th><th>Correct match</th></tr>` + q.rows.map((row,j)=>{ const ok = m[j]===row.answer; if (ok) good++;
+      return `<tr class="${ok?"t-ok":"t-bad"}"><td>${esc(row.left)}</td><td>${m[j]?esc(m[j]):"<i>blank</i>"} ${ok?"✔":"✘"}</td><td>${esc(row.answer)}</td></tr>`; }).join("") + `</table><div class="small">${good}/${q.rows.length} rows correct (the set scores only if every row is right).</div>`;
+  }
+  h += `<div class="exp"><b>Why:</b> ${esc(q.exp)}</div>`;
+  if (q.steps) h += `<div class="steps"><b>Worked solution</b><ol>${q.steps.map(s=>`<li>${esc(s)}</li>`).join("")}</ol></div>`;
+  h += `<div class="row-end"><button class="btn ghost small" onclick="renderLearn(${q.t})">📘 Revise Topic ${q.t}</button></div></div>`;
+  return h;
+}
+
+const POOLS_LOOKUP = {}; ALL.forEach(q=>POOLS_LOOKUP[q.uid] = q);
+function retryWrong(){
+  const list = S.res.filter(r=>!r.ok).map(r=>POOLS_LOOKUP[r.q.uid]);
+  const sec = S.sec === "exam" ? "mixed" : S.sec;
+  startSession(sec, [1,2,3,4,5,6], list.length, S.timed, false, shuffle(list));
+}
+
+window.addEventListener("beforeunload", e=>{ if (S && !S.submitted){ e.preventDefault(); e.returnValue = ""; } });
+document.addEventListener("DOMContentLoaded", renderHome);
+
+</script>
+</body>
+</html>
